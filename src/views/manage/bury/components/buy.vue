@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="filter-container">
+
       <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleBury">添加购墓信息</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
@@ -107,8 +108,7 @@ export default {
       }
       listbuy(data)
         .then(response => {
-          console.log(response)
-          this.list = response.data
+          // this.list = response.data
           this.listLoading = false
         })
         .catch(() => {

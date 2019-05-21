@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <el-button class="filter-item" type="primary" icon="el-icon-edit" style="margin:10px 0" @click="handleBury">添加墓主</el-button>
+    <el-button v-if="list ? (list[0] ? list[0].type_id > list.length : true) : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:10px 0" @click="handleBury">添加墓主信息</el-button>
+    <el-button v-else type="info" plain disabled style="margin:10px 0">已超过墓位最大限制</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="姓名" prop="vcname" />
       <el-table-column align="center" label="性别" prop="sex" />
@@ -15,7 +16,7 @@
       </el-table-column>
     </el-table>
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
-      <el-form v-if="list.length>0" ref="dataFormEdit" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
+      <el-form v-if="list ? list.length>0 : true" ref="dataFormEdit" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
         <el-form-item label="墓主">
           <el-input v-model="dataFormEdit.vcname" />
         </el-form-item>
@@ -121,12 +122,10 @@
 <script>
 import { listType } from '@/api/type'
 import { adddead, listdead, deletedead, updatedead } from '@/api/dead'
-// import { listlink } from '@/api/link'
 export default {
   data() {
     return {
       list: null,
-      // listlink: null,
       listLoading: true,
       type_id: 2,
       dialogFormVisible: false,
@@ -161,13 +160,13 @@ export default {
     cems: {
       handler(val) {
         this.getList()
+        this.SeleteCeme(this.type_id)
       },
       immediate: true
     }
   },
   created() {
-    this.SeleteCeme(this.type_id)
-    this.listtype_()
+    this.Creattype()
   },
   methods: {
     getList() {
@@ -189,10 +188,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.resetFormEdit()
-      // this.listlink_()
     },
     handleUpdate(row) {
-      console.log(row)
       this.dataFormEdit = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -245,7 +242,6 @@ export default {
       const data = this.list.length > 0 ? this.dataFormEdit : Creatdata
       adddead(data)
         .then(response => {
-          console.log(response)
           if (this.list.length > 0) {
             this.list.unshift(response.data)
           } else {
@@ -304,7 +300,7 @@ export default {
         })
       }
     },
-    listtype_() {
+    Creattype() {
       listType()
         .then(response => {
           this.cemeteryType = response.data
