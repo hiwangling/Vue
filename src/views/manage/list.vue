@@ -28,6 +28,7 @@
         <el-tab-pane label="购墓" name="bury"><bury /></el-tab-pane>
         <el-tab-pane label="殡葬服务" name="service"><cemetery-service /></el-tab-pane>
         <el-tab-pane label="寄存" name="save">寄存</el-tab-pane>
+        <el-tab-pane label="碑文" name="monument">碑文</el-tab-pane>
       </el-tabs>
     </el-dialog>
   </div>
@@ -37,6 +38,7 @@ import { listGrave } from '@/api/grave'
 import Pagination from '@/components/Pagination'
 import CemeteryService from './service/CemeteryService'
 import Bury from './bury/Bury'
+// import monumen from './monumen/index'
 export default {
   name: 'ManageList',
   components: { Pagination, CemeteryService, Bury },
@@ -81,6 +83,7 @@ export default {
         })
     },
     CreateCemetery(item) {
+      this.$store.dispatch('cemetery/changepay', item.id)
       this.$store.dispatch('cemetery/addCemetery', item)
       this.dialogStatus = item.vno + '号'
       this.dialogFormVisible = true

@@ -84,8 +84,10 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      const cid = this.cems.id
-      listlink(cid)
+      const data = {
+        cid: this.cems.id
+      }
+      listlink(data)
         .then(response => {
           this.list = response.data
           this.listLoading = false

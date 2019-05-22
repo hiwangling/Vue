@@ -16,18 +16,33 @@ export function addbuy(data) {
   })
 }
 
-export function updatelink(data) {
+export function editbuy(data) {
   return request({
-    url: '/linkman/edit',
+    url: '/cemetery/buy_cemetery_edit',
     method: 'post',
     data
   })
 }
 
-export function deletelink(query) {
+export function deletebuy(query) {
   return request({
-    url: '/linkman/del',
+    url: '/cemetery/buy_cemetery_del',
     method: 'get',
     params: query
   })
 }
+export function get_order_status(query) {
+  return request({
+    url: '/cemetery/get_order_status',
+    method: 'get',
+    params: query
+  })
+}
+export function pay(data) {
+  return request({
+    url: '/cemetery/pay',
+    method: 'post',
+    data
+  })
+}
+

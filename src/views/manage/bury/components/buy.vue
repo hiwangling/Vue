@@ -1,13 +1,24 @@
 <template>
   <div class="container">
-    <div class="filter-container">
-
-      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleBury">添加购墓信息</el-button>
-    </div>
+    <el-button v-if="list ? list.length < 1 : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:0 0 10px 0" @click="handleBury">添加购墓信息</el-button>
+    <el-button v-else type="info" plain disabled style="margin:10px 0">购墓单信息</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
-      <el-table-column align="center" label="姓名" prop="vcname" />
-      <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="订单号" prop="order_no" />
+      <el-table-column align="center" label="购墓人" prop="buyer_name" />
+      <el-table-column align="center" label="购买日期" prop="order_begin" />
+      <el-table-column align="center" label="到期日期" prop="order_end" />
+      <el-table-column align="center" style="width:50px" label="销售金额" prop="sell_price" />
+      <el-table-column align="center" width="80" label="实收金额" prop="real_price" />
+      <el-table-column prop="order_status" label="付款状态" align="center" width="80">
+        <template>
+          <el-tag :type="payStatus | statusFilter">
+            {{ payStatus == 1 ? '未付款' : '已付款' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="payStatus == 1" align="center" label="操作" class-name="small-padding fixed-width" width="220">
         <template slot-scope="scope">
+          <el-button type="warning" size="mini" @click="handlePay(scope.row)">结算</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -42,7 +53,7 @@
           />
         </el-form-item>
         <el-form-item label="销售金额">
-          <el-input v-model="cems.sellprice" />
+          <el-input v-model="cems.sellprice" :disabled="true" />
         </el-form-item>
         <el-form-item label="实收金额">
           <el-input v-model="dataForm.real_price" />
@@ -58,9 +69,18 @@
   </div>
 </template>
 <script>
-import { addbuy, listbuy } from '@/api/buy'
+import { addbuy, listbuy, editbuy, deletebuy, pay } from '@/api/buy'
 import { listlink } from '@/api/link'
 export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        1: 'danger',
+        0: 'success'
+      }
+      return statusMap[status]
+    }
+  },
   data() {
     return {
       list: null,
@@ -87,6 +107,9 @@ export default {
   computed: {
     cems() {
       return this.$store.state.cemetery.cems
+    },
+    payStatus() {
+      return this.$store.state.cemetery.pay
     }
   },
   watch: {
@@ -108,7 +131,7 @@ export default {
       }
       listbuy(data)
         .then(response => {
-          // this.list = response.data
+          this.list = response.data
           this.listLoading = false
         })
         .catch(() => {
@@ -122,20 +145,10 @@ export default {
       this.resetForm()
       this.listlink_()
     },
-    handleUpdate(row) {
-      this.dataForm = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-    },
-    updateData() {
-
-    },
-    handleDelete(row) {
-
-    },
     createData() {
       addbuy(this.dataForm)
         .then(response => {
+          response.data.sell_price = this.cems.sellprice
           this.list.unshift(response.data)
           this.dialogFormVisible = false
           this.$notify.success({
@@ -150,6 +163,82 @@ export default {
           })
         })
     },
+    handleUpdate(row) {
+      this.dataForm = Object.assign({}, row)
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.listlink_()
+    },
+    updateData() {
+      editbuy(this.dataForm)
+        .then((response) => {
+          for (const v of this.list) {
+            if (v.id === response.data.id) {
+              const index = this.list.indexOf(v)
+              this.list.splice(index, 1, response.data)
+              break
+            }
+          }
+          this.dialogFormVisible = false
+          this.$notify.success({
+            title: '成功',
+            message: '更新购墓信息成功'
+          })
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.msg
+          })
+        })
+    },
+    handleDelete(row) {
+      deletebuy(row)
+        .then(response => {
+          this.$notify.success({
+            title: '成功',
+            message: '删除购墓信息成功'
+          })
+          const index = this.list.indexOf(row)
+          this.list.splice(index, 1)
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.msg
+          })
+        })
+    },
+    handlePay() {
+      this.$confirm('结算此订单后购墓信息及墓主信息将无法再次修改, 是否继续?', '结算操作', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const data = {
+          cid: this.cems.id
+        }
+        pay(data)
+          .then(response => {
+            this.$store.dispatch('cemetery/changepay', this.cems.id)
+            this.$notify.success({
+              title: '成功',
+              message: '结算成功'
+            })
+          })
+          .catch(response => {
+            this.$notify.error({
+              title: '失败',
+              message: response.data.msg
+            })
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
     resetForm() {
       this.dataForm = {
         cid: this.cems.id,
@@ -160,8 +249,10 @@ export default {
       }
     },
     listlink_() {
-      const cid = this.cems.id
-      listlink(cid)
+      const data = {
+        cid: this.cems.id
+      }
+      listlink(data)
         .then(response => {
           this.listlink = response.data
         })

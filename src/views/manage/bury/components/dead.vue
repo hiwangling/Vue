@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <el-button v-if="list ? (list[0] ? list[0].type_id > list.length : true) : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:10px 0" @click="handleBury">添加墓主信息</el-button>
-    <el-button v-else type="info" plain disabled style="margin:10px 0">已超过墓位最大限制</el-button>
+    <el-button v-else type="info" plain disabled style="margin:10px 0">墓位信息</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="姓名" prop="vcname" />
       <el-table-column align="center" label="性别" prop="sex" />
       <el-table-column align="center" label="出生日期" prop="birth" />
       <el-table-column align="center" label="去世日期" prop="death" />
       <el-table-column align="center" label="安葬日期" prop="bury" />
-      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="150">
+      <el-table-column v-if="payStatus == 1" align="center" label="操作" class-name="small-padding fixed-width" width="150">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
@@ -154,6 +154,9 @@ export default {
   computed: {
     cems() {
       return this.$store.state.cemetery.cems
+    },
+    payStatus() {
+      return this.$store.state.cemetery.pay
     }
   },
   watch: {

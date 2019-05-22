@@ -1,5 +1,17 @@
 <template>
   <div class="container">
+    <el-form ref="dataForm" status-icon label-position="left" style="width: 600px; ">
+      <el-form-item label="联系人">
+        <el-select v-model="linkman_id" clearable placeholder="请选择" style="width:130px">
+          <el-option
+            v-for="item in listlink"
+            :key="item.id"
+            :label="item.link_name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+    </el-form>
     <div class="filter-container">
       <div class="el-divider el-divider--horizontal"><div class="el-divider__text is-left">服务项目</div></div>
     </div>
@@ -60,22 +72,40 @@
         prop="sellprice"
       />
     </el-table>
+    <div slot="footer" class="dialog-footer service">
+      <el-button>取消</el-button>
+      <el-button type="primary" @click="sendData">确定</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import { listService } from '@/api/service'
+import { listlink } from '@/api/link'
 export default {
   data() {
     return {
+      bury: '',
+      linkman: '',
+      linkman_id: '',
+      listlink: '',
       list: null,
       Sell: null,
       listLoading: true,
       multipleSelection: []
     }
   },
+  computed: {
+    cems() {
+      return this.$store.state.cemetery.cems
+    },
+    payStatus() {
+      return this.$store.state.cemetery.pay
+    }
+  },
   created() {
     this.getList()
+    this.listlink_()
   },
   methods: {
     getList() {
@@ -111,8 +141,26 @@ export default {
       row.edit = false
       row.originalTitle = row.sellprice
     },
+    sendData() {
+      const data = {
+        service: this.Sell
+      }
+      console.log(data)
+    },
     handleSelectionChange(val) {
       this.Sell = val
+    },
+    listlink_() {
+      const data = {
+        cid: this.cems.id
+      }
+      listlink(data)
+        .then(response => {
+          this.listlink = response.data
+        })
+        .catch(() => {
+          this.listlink = null
+        })
     }
   }
 }
@@ -120,6 +168,11 @@ export default {
 <style>
 .el-table .rows {
 height: 50px;
+  }
+  .service{
+    text-align: right;
+    height: 65px;
+    line-height: 80px;
   }
 </style>
 
