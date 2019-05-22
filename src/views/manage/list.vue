@@ -28,7 +28,7 @@
         <el-tab-pane label="购墓" name="sell"><sell /></el-tab-pane>
         <el-tab-pane label="殡葬服务" name="service"><service /></el-tab-pane>
         <!-- <el-tab-pane label="寄存" name="save">寄存</el-tab-pane> -->
-        <el-tab-pane label="碑文" name="monument">碑文</el-tab-pane>
+        <el-tab-pane label="碑文" name="monument"><monumental /></el-tab-pane>
       </el-tabs>
     </el-dialog>
   </div>
@@ -38,10 +38,10 @@ import { listGrave } from '@/api/grave'
 import Pagination from '@/components/Pagination'
 import Service from './service/service'
 import Sell from './sell/sell'
-// import monumen from './monumen/index'
+import monumental from './monumen/monumen'
 export default {
   name: 'ManageList',
-  components: { Pagination, Service, Sell },
+  components: { Pagination, Service, Sell, monumental },
   data() {
     return {
       list: null,

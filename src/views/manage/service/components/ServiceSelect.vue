@@ -71,8 +71,10 @@
 import { listService } from '@/api/service'
 export default {
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    linkman: null
+    linkman: {
+      type: null,
+      required: true
+    }
   },
   data() {
     return {
