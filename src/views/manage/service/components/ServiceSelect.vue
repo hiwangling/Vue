@@ -1,17 +1,5 @@
 <template>
-  <div class="container">
-    <el-form ref="dataForm" status-icon label-position="left" style="width: 600px; ">
-      <el-form-item label="联系人">
-        <el-select v-model="linkman_id" clearable placeholder="请选择" style="width:130px">
-          <el-option
-            v-for="item in listlink"
-            :key="item.id"
-            :label="item.link_name"
-            :value="item.id"
-          />
-        </el-select>
-      </el-form-item>
-    </el-form>
+  <div>
     <div class="filter-container">
       <div class="el-divider el-divider--horizontal"><div class="el-divider__text is-left">服务项目</div></div>
     </div>
@@ -19,7 +7,7 @@
       ref="multipleTable"
       v-loading="listLoading"
       border
-      :row-class-name="tableRowClassName"
+      :row-class-name="tableRow"
       highlight-current-row
       :data="list"
       tooltip-effect="dark"
@@ -73,7 +61,7 @@
       />
     </el-table>
     <div slot="footer" class="dialog-footer service">
-      <el-button>取消</el-button>
+      <el-button @click="CloseDialog">取消</el-button>
       <el-button type="primary" @click="sendData">确定</el-button>
     </div>
   </div>
@@ -81,14 +69,15 @@
 
 <script>
 import { listService } from '@/api/service'
-import { listlink } from '@/api/link'
 export default {
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    linkman: null
+  },
   data() {
     return {
       bury: '',
-      linkman: '',
       linkman_id: '',
-      listlink: '',
       list: null,
       Sell: null,
       listLoading: true,
@@ -105,7 +94,6 @@ export default {
   },
   created() {
     this.getList()
-    this.listlink_()
   },
   methods: {
     getList() {
@@ -126,7 +114,7 @@ export default {
           this.listLoading = false
         })
     },
-    tableRowClassName({ row, rowIndex }) {
+    tableRow({ row, rowIndex }) {
       return 'rows'
     },
     cancelEdit(row) {
@@ -143,24 +131,16 @@ export default {
     },
     sendData() {
       const data = {
-        service: this.Sell
+        service: this.Sell,
+        linkman: this.linkman
       }
       console.log(data)
     },
+    CloseDialog() {
+      this.$emit('CloseDialog', false)
+    },
     handleSelectionChange(val) {
       this.Sell = val
-    },
-    listlink_() {
-      const data = {
-        cid: this.cems.id
-      }
-      listlink(data)
-        .then(response => {
-          this.listlink = response.data
-        })
-        .catch(() => {
-          this.listlink = null
-        })
     }
   }
 }

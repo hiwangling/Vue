@@ -1,7 +1,7 @@
 import { get_order_status } from '@/api/buy'
 const state = {
   cems: null,
-  pay: 1
+  pay: ''
 }
 
 const mutations = {
@@ -17,7 +17,7 @@ const actions = {
   addCemetery({ commit }, cems) {
     commit('ADD_CEMETERY', cems)
   },
-  changepay({ commit }, cid) {
+  pay({ commit }, cid) {
     return new Promise((resolve, reject) => {
       const data = { cid: cid }
       get_order_status(data).then(response => {

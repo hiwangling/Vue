@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
     <el-button v-if="list ? list.length < 1 : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:0 0 10px 0" @click="handleBury">添加购墓信息</el-button>
     <el-button v-else type="info" plain disabled style="margin:10px 0">购墓单信息</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
@@ -220,7 +221,7 @@ export default {
         }
         pay(data)
           .then(response => {
-            this.$store.dispatch('cemetery/changepay', this.cems.id)
+            this.$store.dispatch('cemetery/pay', this.cems.id)
             this.$notify.success({
               title: '成功',
               message: '结算成功'

@@ -23,11 +23,11 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog id="cemetery" :title="dialogStatus" :visible.sync="dialogFormVisible">
+    <el-dialog id="cemetery" :title="dialogStatus" :visible.sync="dialogFormVisible" @open="activeName = 'sell'">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="购墓" name="bury"><bury /></el-tab-pane>
-        <el-tab-pane label="殡葬服务" name="service"><cemetery-service /></el-tab-pane>
-        <el-tab-pane label="寄存" name="save">寄存</el-tab-pane>
+        <el-tab-pane label="购墓" name="sell"><sell /></el-tab-pane>
+        <el-tab-pane label="殡葬服务" name="service"><service /></el-tab-pane>
+        <!-- <el-tab-pane label="寄存" name="save">寄存</el-tab-pane> -->
         <el-tab-pane label="碑文" name="monument">碑文</el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -36,18 +36,18 @@
 <script>
 import { listGrave } from '@/api/grave'
 import Pagination from '@/components/Pagination'
-import CemeteryService from './service/CemeteryService'
-import Bury from './bury/Bury'
+import Service from './service/service'
+import Sell from './sell/sell'
 // import monumen from './monumen/index'
 export default {
   name: 'ManageList',
-  components: { Pagination, CemeteryService, Bury },
+  components: { Pagination, Service, Sell },
   data() {
     return {
       list: null,
       total: 0,
       cid: '',
-      activeName: 'bury',
+      activeName: 'sell',
       listLoading: true,
       listQuery: {
         page: 1,
@@ -83,7 +83,7 @@ export default {
         })
     },
     CreateCemetery(item) {
-      this.$store.dispatch('cemetery/changepay', item.id)
+      this.$store.dispatch('cemetery/pay', item.id)
       this.$store.dispatch('cemetery/addCemetery', item)
       this.dialogStatus = item.vno + '号'
       this.dialogFormVisible = true
