@@ -1,5 +1,14 @@
 <template>
-  <div v-drag class="box" :contenteditable="true" :style="styles" @input="changeTxt" @focus="lock=true" @blur="lock=false" v-html="innerText" />
+  <div
+    v-drag
+    class="box"
+    :contenteditable="true"
+    :style="{'top':top + 'px','left':left + 'px'}"
+    @input="changeTxt"
+    @focus="lock=true"
+    @blur="lock=false"
+    v-html="innerText"
+  />
 </template>
 <script>
 export default {
@@ -37,8 +46,12 @@ export default {
       type: Object,
       required: true
     },
-    styles: {
-      type: Object,
+    top: {
+      type: null,
+      required: true
+    },
+    left: {
+      type: null,
       required: true
     }
   },
@@ -74,7 +87,8 @@ export default {
         width: 22px!important;
         padding: 2px 0px;
         text-align: center;
-        border: 1px dashed #666;
+        cursor:pointer;
+        /* border: 1px dashed #666; */
         border-top: 5px solid #4a9ff9;
         outline: none;
     }
