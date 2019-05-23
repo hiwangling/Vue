@@ -10,14 +10,24 @@ const manageRouter = {
   meta: { title: '工作中心', icon: 'shopping' },
   children: [
     {
-      path: 'list',
+      path: 'index',
       name: 'ManageList',
-      component: () => import('@/views/manage/list'),
+      component: () => import('@/views/manage/index'),
       meta: {
         title: '业务大厅',
         noCache: true,
         perms: ['GET /api/v1/service_info/list', 'POST /api/v1/service_info/add', 'POST /api/v1/service_info/edit', 'GET /api/v1/service_info/del']
       }
+    },
+    {
+      path: 'list/:id(\\d+)',
+      component: () => import('@/views/manage/list'),
+      name: 'list',
+      meta: {
+        title: '业务大厅',
+        noCache: true
+      },
+      hidden: true
     }
   ]
 }

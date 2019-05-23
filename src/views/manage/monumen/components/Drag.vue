@@ -3,7 +3,7 @@
     v-drag
     class="box"
     :contenteditable="true"
-    :style="{'top':top + 'px','left':left + 'px'}"
+    :style="{'top':top + 'px','left':left + 'px','width':horizontal ? 'auto' : '22px'}"
     @input="changeTxt"
     @focus="lock=true"
     @blur="lock=false"
@@ -53,6 +53,10 @@ export default {
     left: {
       type: null,
       required: true
+    },
+    horizontal: {
+      type: null,
+      required: true
     }
   },
   data() {
@@ -84,12 +88,12 @@ export default {
         position: absolute;
         top: 10px;
         left: 10px;
-        width: 22px!important;
+        width: 22px;
         padding: 2px 0px;
         text-align: center;
         cursor:pointer;
         /* border: 1px dashed #666; */
-        border-top: 5px solid #4a9ff9;
+        border-top: 3px solid #4a9ff9;
         outline: none;
     }
 </style>
