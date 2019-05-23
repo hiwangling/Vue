@@ -16,7 +16,15 @@ export function addservices(data) {
   })
 }
 
-export function editservices(query) {
+export function editservices(data) {
+  return request({
+    url: '/cemetery/buy_services_edit',
+    method: 'post',
+    data
+  })
+}
+
+export function getEditService(query) {
   return request({
     url: '/cemetery/buy_services_one_list',
     method: 'get',

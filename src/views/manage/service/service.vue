@@ -4,11 +4,11 @@
       <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加服务</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
-      <el-table-column align="center" label="订单号" prop="order_no" />
-      <el-table-column align="center" label="购墓人" prop="buyer_name" />
-      <el-table-column align="center" label="购买日期" prop="create_time" />
-      <el-table-column align="center" label="服务项目" prop="sell_title" />
-      <el-table-column align="center" style="width:50px" label="服务总价" prop="sum_price" />
+      <el-table-column align="center" width="110" label="订单号" prop="order_no" />
+      <el-table-column align="center" width="80" label="购墓人" prop="buyer_name" />
+      <el-table-column align="center" width="100" label="购买日期" prop="create_time" />
+      <el-table-column align="center" label="服务项目" prop="sell_title" show-overflow-tooltip />
+      <el-table-column align="center" width="80" label="服务总价" prop="sum_price" />
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.order_status | statusFilter">
@@ -22,18 +22,21 @@
             <el-button type="warning" size="mini" @click="handlePay(scope.row)">结算</el-button>
             <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           </template>
+          <template v-else>
+            <el-button type="success" size="mini" plain disabled>已结算</el-button>
+          </template>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
-      <Service-select :service="service" :creatservice="creatservice" @CloseDialog="CloseDialog" />
+      <Service-select ref="child" @CloseDialog="CloseDialog" />
     </el-dialog>
   </div>
 </template>
 <script>
 import ServiceSelect from './components/ServiceSelect'
-import { getsevices, editservices } from '@/api/buy-service'
+import { getsevices } from '@/api/buy-service'
 export default {
   filters: {
     statusFilter(status) {
@@ -50,8 +53,6 @@ export default {
       list: null,
       linkman_id: '',
       listlink: '',
-      service: null,
-      creatservice: '',
       linkdata: null,
       listLoading: false,
       dialogStatus: '',
@@ -94,18 +95,16 @@ export default {
     handleCreate() {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
-      this.creatservice = true
+      this.$nextTick(() => {
+        this.$refs.child.restservice()
+      })
     },
     handleUpdate(row) {
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
-      const data = {
-        id: row.id
-      }
-      editservices(data)
-        .then(response => {
-          this.service = response.data.service
-        })
+      this.$nextTick(() => {
+        this.$refs.child.editservice(row.id)
+      })
     },
     CloseDialog(val) {
       this.getList()

@@ -58,7 +58,7 @@
       v-loading="listLoading"
       :show-header="false"
       show-summary
-      :data="Sell"
+      :data="sell"
       @selection-change="handleSelectionChange"
     >
       <el-table-column
@@ -71,34 +71,25 @@
     </el-table>
     <div slot="footer" class="dialog-footer service">
       <el-button @click="CloseDialog">取消</el-button>
-      <el-button type="primary" @click="sendData">确定</el-button>
+      <el-button v-if="dialogStatus=='create'" type="primary" @click="sendData">确定</el-button>
+      <el-button v-else type="primary" @click="editData">确定</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import { listService } from '@/api/service'
-// import { addservices } from '@/api/buy-service'
+import { getEditService, addservices, editservices } from '@/api/buy-service'
 import { listlink } from '@/api/link'
 export default {
-  props: {
-    service: {
-      type: null,
-      required: true
-    },
-    creatservice: {
-      type: null,
-      required: true,
-      default: false
-    }
-  },
   data() {
     return {
       bury: '',
       listlink: '',
       linkman_id: '',
+      dialogStatus: '',
       list: null,
-      Sell: null,
+      sell: null,
       listLoading: true,
       multipleSelection: []
     }
@@ -106,42 +97,13 @@ export default {
   computed: {
     cems() {
       return this.$store.state.cemetery.cems
-    },
-    payStatus() {
-      return this.$store.state.cemetery.pay
-    }
-  },
-  watch: {
-    service: {
-      handler(n, o) {
-        this.$nextTick(() => {
-          console.log(this.service)
-          if (this.service !== null) {
-            this.service.forEach((v, k) => {
-              this.$refs.multipleTable.toggleRowSelection(this.$refs.multipleTable.data.find((item) => item.id === v.id), true)
-            })
-          }
-        })
-      },
-      immediate: true
-    },
-    creatservice: {
-      handler(val) {
-        console.log(1)
-        this.$refs.multipleTable.clearSelection()
-      },
-      immediate: true
     }
   },
   created() {
     this.getList()
-    this.listlink_()
   },
   methods: {
     getList() {
-      this.$nextTick(() => {
-        this.$refs.multipleTable.clearSelection()
-      })
       this.listLoading = true
       listService()
         .then(response => {
@@ -174,6 +136,27 @@ export default {
       row.edit = false
       row.originalTitle = row.sellprice
     },
+    restservice() {
+      this.linkman_id = null
+      this.dialogStatus = 'create'
+      this.$nextTick(() => {
+        this.$refs.multipleTable.clearSelection()
+      })
+      this.findlink()
+    },
+    editservice(val) {
+      const data = { id: val }
+      this.dialogStatus = 'update'
+      getEditService(data)
+        .then(response => {
+          this.linkman_id = response.data.linkman_id
+          const service = response.data.services
+          service.forEach((v, k) => {
+            this.$refs.multipleTable.toggleRowSelection(this.$refs.multipleTable.data.find((item) => item.id === v.id), true)
+          })
+        })
+      this.findlink()
+    },
     sendData() {
       let sum_price = 0
       this.Sell.forEach((v, k) => {
@@ -185,30 +168,45 @@ export default {
         sum_price: sum_price,
         linkman_id: this.linkman_id
       }
-      console.log(data)
-      // addservices(data)
-      //   .then(response => {
-      //     this.list.unshift(response.data)
-      //     this.$notify.success({
-      //       title: '成功',
-      //       message: '添加服务成功'
-      //     })
-      //     this.CloseDialog()
-      //   })
-      //   .catch(response => {
-      //     this.$notify.error({
-      //       title: '失败',
-      //       message: response.data.msg
-      //     })
-      //   })
+      addservices(data)
+        .then(response => {
+          this.$notify.success({
+            title: '成功',
+            message: '添加服务成功'
+          })
+          this.CloseDialog()
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.msg
+          })
+        })
+    },
+    editData() {
+      const data = {}
+      editservices(data)
+        .then(response => {
+          this.$notify.success({
+            title: '成功',
+            message: '编辑服务成功'
+          })
+          this.CloseDialog()
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.msg
+          })
+        })
     },
     CloseDialog() {
       this.$emit('CloseDialog', false)
     },
     handleSelectionChange(val) {
-      this.Sell = val
+      this.sell = val
     },
-    listlink_() {
+    findlink() {
       const data = {
         cid: this.cems.id
       }
@@ -223,11 +221,11 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .el-table .rows {
 height: 50px;
   }
-  .service{
+.service{
     text-align: right;
     height: 65px;
     line-height: 80px;

@@ -5,10 +5,10 @@
     <el-button v-else type="info" plain disabled style="margin:10px 0">购墓单信息</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="订单号" prop="order_no" />
-      <el-table-column align="center" label="购墓人" prop="buyer_name" />
+      <el-table-column align="center" width="80" label="购墓人" prop="buyer_name" />
       <el-table-column align="center" label="购买日期" prop="order_begin" />
       <el-table-column align="center" label="到期日期" prop="order_end" />
-      <el-table-column align="center" style="width:50px" label="销售金额" prop="sell_price" />
+      <el-table-column align="center" width="80" label="销售金额" prop="sell_price" />
       <el-table-column align="center" width="80" label="实收金额" prop="real_price" />
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template>
