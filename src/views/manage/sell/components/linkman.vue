@@ -64,7 +64,7 @@ export default {
         create: '创建'
       },
       rules: {
-        // vcname: [{ required: true, message: '墓主不能为空', trigger: 'blur' }]
+        link_name: [{ required: true, message: '联系人姓名不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -101,6 +101,9 @@ export default {
       this.resetForm()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     resetForm() {
       this.dataForm = {

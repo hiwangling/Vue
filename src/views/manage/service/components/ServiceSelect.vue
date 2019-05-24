@@ -1,17 +1,20 @@
 <template>
   <div>
-    <div class="filter-container">
-      <el-select v-model="linkman_id" clearable placeholder="请选择付款人" style="width:150px">
-        <el-option
-          v-for="item in listlink"
-          :key="item.id"
-          :label="item.link_name"
-          :value="item.id"
-        />
-      </el-select>
-
-      <div class="el-divider el-divider--horizontal"><div class="el-divider__text is-left">服务项目</div></div>
+    <div class="filter-container" style="height:40px">
+      <el-form ref="dataForm" :rules="rules" status-icon label-position="left" :model="dataForm" label-width="80px">
+        <el-form-item label="联系人" prop="linkman_id">
+          <el-select v-model="dataForm.linkman_id" clearable placeholder="请选择" style="width:150px" size="mini">
+            <el-option
+              v-for="item in listlink"
+              :key="item.id"
+              :label="item.link_name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
     </div>
+    <div class="el-divider el-divider--horizontal"><div class="el-divider__text is-left">服务项目</div></div>
     <el-table
       ref="multipleTable"
       v-loading="listLoading"
@@ -23,22 +26,9 @@
       style="width: 100%;margin-bottom:10px"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column
-        type="selection"
-        align="center"
-        width="55"
-      />
-      <el-table-column
-        prop="service_name"
-        align="center"
-        label="服务名称"
-      />
-      <el-table-column
-        prop="sellprice"
-        align="center"
-        label="服务价格"
-        show-overflow-tooltip
-      >
+      <el-table-column type="selection" align="center" width="55" />
+      <el-table-column prop="service_name" align="center" label="服务名称" />
+      <el-table-column prop="sellprice" align="center" width="300" label="服务价格" show-overflow-tooltip>
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-input v-model="row.sellprice" class="edit-input" size="mini" style="width:100px" />
@@ -61,13 +51,8 @@
       :data="sell"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column
-        prop="service_name"
-        width="200"
-      />
-      <el-table-column
-        prop="sellprice"
-      />
+      <el-table-column prop="service_name" width="200" />
+      <el-table-column prop="sellprice" />
     </el-table>
     <div slot="footer" class="dialog-footer service">
       <el-button @click="CloseDialog">取消</el-button>
@@ -86,17 +71,39 @@ export default {
     return {
       bury: '',
       listlink: '',
-      linkman_id: '',
+      order_detail_ids: null,
+      sum_price: '',
+      id: '',
+      dataForm: {
+        linkman_id: ''
+      },
       dialogStatus: '',
       list: null,
       sell: null,
       listLoading: true,
-      multipleSelection: []
+      multipleSelection: [],
+      rules: {
+        linkman_id: [{ required: true, message: '联系人不能为空', trigger: 'change' }]
+      }
     }
   },
   computed: {
     cems() {
       return this.$store.state.cemetery.cems
+    }
+  },
+  watch: {
+    sell: {
+      handler() {
+        let sum_price = 0
+        if (this.sell) {
+          this.sell.forEach((v, k) => {
+            sum_price = sum_price + parseInt(v.sellprice)
+          })
+        }
+        this.sum_price = sum_price
+      },
+      immediate: true
     }
   },
   created() {
@@ -137,68 +144,86 @@ export default {
       row.originalTitle = row.sellprice
     },
     restservice() {
-      this.linkman_id = null
+      this.dataForm.linkman_id = null
       this.dialogStatus = 'create'
       this.$nextTick(() => {
         this.$refs.multipleTable.clearSelection()
       })
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
       this.findlink()
     },
     editservice(val) {
+      this.id = val
       const data = { id: val }
       this.dialogStatus = 'update'
       getEditService(data)
         .then(response => {
-          this.linkman_id = response.data.linkman_id
+          this.order_detail_ids = response.data.order_detail_ids
+          this.dataForm.linkman_id = response.data.linkman_id
           const service = response.data.services
           service.forEach((v, k) => {
             this.$refs.multipleTable.toggleRowSelection(this.$refs.multipleTable.data.find((item) => item.id === v.id), true)
           })
         })
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
       this.findlink()
     },
     sendData() {
-      let sum_price = 0
-      this.Sell.forEach((v, k) => {
-        sum_price = sum_price + parseInt(v.sellprice)
-      })
       const data = {
         cid: this.cems.id,
-        services: this.Sell,
-        sum_price: sum_price,
-        linkman_id: this.linkman_id
+        services: this.sell,
+        sum_price: this.sum_price,
+        linkman_id: this.dataForm.linkman_id
       }
-      addservices(data)
-        .then(response => {
-          this.$notify.success({
-            title: '成功',
-            message: '添加服务成功'
-          })
-          this.CloseDialog()
-        })
-        .catch(response => {
-          this.$notify.error({
-            title: '失败',
-            message: response.data.msg
-          })
-        })
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          addservices(data)
+            .then(response => {
+              this.$notify.success({
+                title: '成功',
+                message: '添加服务成功'
+              })
+              this.CloseDialog()
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.msg
+              })
+            })
+        }
+      })
     },
     editData() {
-      const data = {}
-      editservices(data)
-        .then(response => {
-          this.$notify.success({
-            title: '成功',
-            message: '编辑服务成功'
-          })
-          this.CloseDialog()
-        })
-        .catch(response => {
-          this.$notify.error({
-            title: '失败',
-            message: response.data.msg
-          })
-        })
+      const data = {
+        id: this.id,
+        services: this.sell,
+        order_detail_ids: this.order_detail_ids,
+        sum_price: this.sum_price,
+        linkman_id: this.dataForm.linkman_id
+      }
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          editservices(data)
+            .then(response => {
+              this.$notify.success({
+                title: '成功',
+                message: '编辑服务成功'
+              })
+              this.CloseDialog()
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.msg
+              })
+            })
+        }
+      })
     },
     CloseDialog() {
       this.$emit('CloseDialog', false)
@@ -207,9 +232,7 @@ export default {
       this.sell = val
     },
     findlink() {
-      const data = {
-        cid: this.cems.id
-      }
+      const data = { cid: this.cems.id }
       listlink(data)
         .then(response => {
           this.listlink = response.data
@@ -221,7 +244,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .el-table .rows {
 height: 50px;
   }

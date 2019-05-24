@@ -201,10 +201,10 @@ export default {
   },
   created() {
     this.getList()
-    get_gardens().then(response => { this.cemetery.gardens = response.data })
-    get_status().then(response => { this.cemetery.usestatus = response.data })
-    get_styles().then(response => { this.cemetery.styles = response.data })
-    get_types().then(response => { this.cemetery.types = response.data })
+    get_gardens().then(res => { this.cemetery.gardens = res.data })
+    get_status().then(res => { this.cemetery.usestatus = res.data })
+    get_styles().then(res => { this.cemetery.styles = res.data })
+    get_types().then(res => { this.cemetery.types = res.data })
   },
   methods: {
     getList() {

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-button v-if="list ? (list[0] ? list[0].type_id > list.length : true) : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:10px 0" @click="handleBury">添加墓主信息</el-button>
-    <el-button v-else type="info" plain disabled style="margin:10px 0">墓位信息</el-button>
+    <el-button v-else type="info" plain disabled style="margin:10px 0">墓位信息 ({{ typeStatus }})</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="姓名" prop="vcname" />
       <el-table-column align="center" label="性别" prop="sex" />
@@ -157,6 +157,15 @@ export default {
     },
     payStatus() {
       return this.$store.state.cemetery.pay
+    },
+    typeStatus() {
+      let obj = null
+      if (this.cemeteryType) {
+        obj = this.cemeteryType.find((item) => {
+          return item.hrm === this.type_id
+        })
+      }
+      return obj
     }
   },
   watch: {
@@ -180,6 +189,7 @@ export default {
       listdead(data)
         .then(response => {
           this.list = response.data
+          this.type_id = this.list[0].type_id
           this.listLoading = false
         })
         .catch(() => {

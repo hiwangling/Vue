@@ -215,12 +215,15 @@ aside {
 .dialog .el-input--medium .el-input__inner{
   width: 150px;
 }
-.dialog .el-form-item--medium .el-form-item__content{
-  margin-right: 15px;
-  margin-left: 85px!important
-}
-.dialog .el-form-item__label{
-  width: 85px!important;
+// .dialog .el-form-item--medium .el-form-item__content{
+//   margin-right: 15px;
+//   margin-left: 85px!important
+// }
+// .dialog .el-form-item__label{
+//   width: 85px!important;
+// }
+.el-form-item--medium .el-form-item__label{
+  text-align: center
 }
 .sell {
   background-color: rgba(64,151,170, 0.1);

@@ -24,6 +24,22 @@ export function editservices(data) {
   })
 }
 
+export function delservices(query) {
+  return request({
+    url: '/cemetery/buy_cemetery_del',
+    method: 'get',
+    params: query
+  })
+}
+
+export function payservices(data) {
+  return request({
+    url: '/cemetery/buy_services_pay',
+    method: 'post',
+    data
+  })
+}
+
 export function getEditService(query) {
   return request({
     url: '/cemetery/buy_services_one_list',
