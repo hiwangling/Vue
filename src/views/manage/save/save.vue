@@ -163,6 +163,7 @@ export default {
         })
     },
     handleCreate() {
+      this.resetForm()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -170,16 +171,24 @@ export default {
       })
       this.findlink()
     },
+    resetForm() {
+      this.dataForm = {
+        cid: this.cems.id,
+        linkman_id: '',
+        savebegindate: '',
+        saveenddate: '',
+        saveareaaddr: '',
+        saveprice: ''
+      }
+    },
     createData() {
-      this.dataForm.cid = this.cems.id
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createSave(this.dataForm)
             .then(response => {
-              console.log(response.data)
-              this.list.unshift(response.data)
+              // this.list.unshift(response.data)
+              this.getList()
               this.dialogFormVisible = false
-              //   this.getList()
               this.$notify.success({
                 title: '成功',
                 message: '添加寄存信息成功'
@@ -207,16 +216,16 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           updateSave(this.dataForm)
-            .then(() => {
-              for (const v of this.list) {
-                if (v.id === this.dataForm.id) {
-                  const index = this.list.indexOf(v)
-                  this.list.splice(index, 1, this.dataForm)
-                  break
-                }
-              }
-              this.dialogFormVisible = false
+            .then((response) => {
+              // for (const v of this.list) {
+              //   if (v.id === response.data.id) {
+              //     const index = this.list.indexOf(v)
+              //     this.list.splice(index, 1, response.data)
+              //     break
+              //   }
+              // }
               this.getList()
+              this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '更新寄存信息成功'
@@ -249,7 +258,18 @@ export default {
         })
     },
     handlePay(row) {
+      this.$confirm('付款此订单后寄存信息将无法修改和删除, 是否继续?', '付款操作', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
 
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     },
     handleGo(row) {
 

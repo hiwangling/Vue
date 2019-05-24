@@ -3,7 +3,7 @@
 
     <!-- 查询和其他操作 -->
     <div class="filter-container">
-      <el-input v-model="listQuery.type_name" clearable class="filter-item" style="width: 200px;" placeholder="请输入墓园名称" />
+      <el-input v-model="listQuery.keyword" clearable class="filter-item" style="width: 200px;" placeholder="请输入墓园名称" />
       <el-button v-permission="['GET /api/v1/cemetery_classify/g_list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button v-permission="['POST /api/v1/cemetery_classify/g_add']" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
     </div>

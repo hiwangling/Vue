@@ -107,10 +107,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['月度销售额', '年度销售额']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: '月度销售额', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -126,7 +126,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'actual',
+          name: '年度销售额',
           smooth: true,
           type: 'line',
           itemStyle: {

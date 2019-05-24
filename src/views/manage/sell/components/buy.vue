@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <el-button v-if="list ? list.length < 1 : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:0 0 10px 0" @click="handleBury">添加购墓信息</el-button>
     <el-button v-else type="info" plain disabled style="margin:10px 0">购墓单信息</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
@@ -19,7 +18,7 @@
       </el-table-column>
       <el-table-column v-if="payStatus == 1" align="center" label="操作" class-name="small-padding fixed-width" width="220">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" @click="handlePay(scope.row)">结算</el-button>
+          <el-button type="warning" size="mini" @click="handlePay(scope.row)">付款</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -225,7 +224,7 @@ export default {
         })
     },
     handlePay() {
-      this.$confirm('结算此订单后购墓信息及墓主信息将无法再次修改, 是否继续?', '结算操作', {
+      this.$confirm('付款此订单后购墓信息及墓主信息将无法再次修改, 是否继续?', '付款操作', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -238,7 +237,7 @@ export default {
             this.$store.dispatch('cemetery/pay', this.cems.id)
             this.$notify.success({
               title: '成功',
-              message: '结算成功'
+              message: '付款成功'
             })
           })
           .catch(response => {

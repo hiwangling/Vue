@@ -16,7 +16,7 @@ const saveRouter = {
       meta: {
         title: '寄存管理',
         noCache: true,
-        perms: ['GET /api/v1/cemetery_classify/a_list', 'POST /api/v1/cemetery_classify/a_add', 'POST /api/v1/cemetery_classify/a_edit', 'GET /api/v1/cemetery_classify/a_del']
+        perms: ['GET /api/v1/save/list']
       }
     }
   ]

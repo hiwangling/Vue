@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="filter-container" style="height:40px">
-      <el-form ref="dataForm" :rules="rules" status-icon label-position="left" :model="dataForm" label-width="80px">
+      <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="80px">
         <el-form-item label="联系人" prop="linkman_id">
           <el-select v-model="dataForm.linkman_id" clearable placeholder="请选择" style="width:150px" size="mini">
             <el-option
@@ -128,9 +128,6 @@ export default {
           this.listLoading = false
         })
     },
-    tableRow({ row, rowIndex }) {
-      return 'rows'
-    },
     cancelEdit(row) {
       row.sellprice = row.originalTitle
       row.edit = false
@@ -230,6 +227,9 @@ export default {
     },
     handleSelectionChange(val) {
       this.sell = val
+    },
+    tableRow({ row, rowIndex }) {
+      return 'rows'
     },
     findlink() {
       const data = { cid: this.cems.id }

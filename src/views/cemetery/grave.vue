@@ -33,7 +33,7 @@
       <el-table-column align="center" label="状态" prop="usestatus">
         <template slot-scope="{row}">
           <el-tag :type="row.usestatus | statusFilter">
-            {{ row.status | userstatusFilter }}
+            {{ row.usestatus | userstatusFilter }}
           </el-tag>
         </template>
       </el-table-column>
@@ -144,7 +144,7 @@ export default {
       return statusMap[status]
     },
     userstatusFilter(status) {
-      const statusMap = { 1: '待销售', 2: '已经预定', 3: '已经销售', 4: '已经安葬', 5: '迁走' }
+      const statusMap = { 1: '待销售', 2: '已预定', 3: '已销售', 4: '已安葬', 5: '迁走' }
       return statusMap[status]
     }
   },

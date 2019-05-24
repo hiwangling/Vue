@@ -3,7 +3,7 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container">
       <el-input v-model="listQuery.type_name" clearable class="filter-item" style="width: 200px;" placeholder="请输入墓穴或者墓号" />
-      <el-button v-permission="['GET /api/v1/service_info/list']" class="filter-item" type="primary" icon="el-icon-search">查找</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-search">查找</el-button>
     </div>
     <div class="manage-tag">
       <el-tag class="sell">待售(22)</el-tag>

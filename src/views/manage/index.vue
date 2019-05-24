@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20" style="margin-top:20px;">
+    <div class="filter-container">
+      <el-select v-model="listQuery.keyword" placeholder="选择墓园" clearable style="width: 160px" class="filter-item">
+        <el-option v-for="item in garden" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
+    </div>
+    <el-row :gutter="20">
       <el-col v-for="(item, index) in list" :key="index" :span="6">
         <router-link :to="'/manage/list/'+item.id" class="">
           <el-card class="box-card">
@@ -30,6 +36,10 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
+      garden: [{
+        id: '',
+        name: '长青园'
+      }],
       listQuery: {
         page: 1,
         limit: 20,
@@ -59,6 +69,10 @@ export default {
           this.total = 0
           this.listLoading = false
         })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
 }
@@ -70,7 +84,7 @@ export default {
  }
  .box-card{
  padding:5px;
-margin-top:10px;
+
  }
 .el-card__body{
 padding:5px;
@@ -83,7 +97,8 @@ padding:5px;
     display: block;
   }
   .manage-tag{
-margin-top:10px;text-align: center;
+margin-top:10px;
+text-align: center;
   }
   .el-tag--medium{
   margin-right: 10px;

@@ -23,7 +23,7 @@
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="220">
         <template slot-scope="scope">
           <template v-if="scope.row.order_status === 1">
-            <el-button type="warning" size="mini" @click="handlePay(scope.row)">结算</el-button>
+            <el-button type="warning" size="mini" @click="handlePay(scope.row)">付款</el-button>
             <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
             <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
           </template>
@@ -132,7 +132,7 @@ export default {
         })
     },
     handlePay(row) {
-      this.$confirm('结算此订单后服务信息将无法修改和删除, 是否继续?', '结算操作', {
+      this.$confirm('付款此订单后服务信息将无法修改和删除, 是否继续?', '付款操作', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -141,7 +141,7 @@ export default {
           .then(response => {
             this.$notify.success({
               title: '成功',
-              message: '结算服务成功'
+              message: '付款服务成功'
             })
             this.getList()
           })

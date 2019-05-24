@@ -15,8 +15,8 @@ const manageRouter = {
       component: () => import('@/views/manage/index'),
       meta: {
         title: '业务大厅',
-        noCache: true,
-        perms: ['GET /api/v1/service_info/list', 'POST /api/v1/service_info/add', 'POST /api/v1/service_info/edit', 'GET /api/v1/service_info/del']
+        noCache: true
+        //   perms: ['GET /api/v1/service_info/list', 'POST /api/v1/service_info/add', 'POST /api/v1/service_info/edit', 'GET /api/v1/service_info/del']
       }
     },
     {
@@ -24,7 +24,7 @@ const manageRouter = {
       component: () => import('@/views/manage/list'),
       name: 'list',
       meta: {
-        title: '业务大厅',
+        title: '业务办理',
         noCache: true
       },
       hidden: true
