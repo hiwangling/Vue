@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div style="margin:0 0 10px 0">
-      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加寄存服务</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加寄存信息</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="姓名" prop="link_name" />
@@ -25,16 +25,17 @@
       </el-table-column>
       <el-table-column align="center" label="到期时间" prop="order_state" width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.guoqi_status | statusFilter">
+          <el-tag v-if="scope.row.guoqi_status" :type="scope.row.guoqi_status | statusFilter">
             {{ scope.row.guoqi_days }}
           </el-tag>
+          <el-tag v-else>已到期</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="220">
         <template slot-scope="scope">
           <template v-if="scope.row.save_status == 1">
             <el-button v-if="scope.row.order_state == 1" type="warning" size="mini" @click="handlePay(scope.row)">付款</el-button>
-            <el-button v-else type="warning" size="mini" @click="handleGo(scope.row)">取走</el-button>
+            <el-button v-else type="success" size="mini" @click="handleGo(scope.row)">取走</el-button>
             <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
             <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
           </template>
@@ -45,7 +46,7 @@
       </el-table-column>
     </el-table>
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
-      <el-form ref="dataForm" :rules="rules" status-icon label-position="left" :model="dataForm" label-width="100px" style="width: 600px; margin-left:50px;">
+      <el-form ref="dataForm" :inline="true" :rules="rules" status-icon label-position="left" :model="dataForm" label-width="100px" style="width: 600px; margin-left:50px;">
         <el-form-item label="联系人" prop="linkman_id">
           <el-select v-model="dataForm.linkman_id" clearable placeholder="请选择" style="width:150px">
             <el-option
@@ -96,7 +97,7 @@
 </template>
 <script>
 import { listlink } from '@/api/link'
-import { updateSave, createSave, listSave, deleteSave } from '@/api/save'
+import { updateSave, createSave, listSave, deleteSave, PaySave } from '@/api/save'
 export default {
   filters: {
     statusFilter(status) {
@@ -263,7 +264,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        const data = { id: row.id }
+        PaySave(data)
+          .then(response => {
+            this.$notify.success({
+              title: '成功',
+              message: '付款服务成功'
+            })
+            this.getList()
+          })
+          .catch(response => {
+            this.$notify.error({
+              title: '失败',
+              message: response.data.msg
+            })
+          })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -272,7 +287,32 @@ export default {
       })
     },
     handleGo(row) {
-
+      this.$confirm('确定取走?', '取走操作', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.save_status = 2
+        updateSave(row)
+          .then((response) => {
+            this.getList()
+            this.$notify.success({
+              title: '成功',
+              message: '已取走'
+            })
+          })
+          .catch(response => {
+            this.$notify.error({
+              title: '失败',
+              message: response
+            })
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     },
     findlink() {
       const data = { cid: this.cems.id }

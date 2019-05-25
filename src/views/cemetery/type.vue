@@ -40,7 +40,7 @@
 <script>
 import { listType, createType, updateType, deleteType } from '@/api/type'
 export default {
-  name: 'CemeteryType',
+  name: 'VueType',
   data() {
     return {
       list: null,

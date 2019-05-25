@@ -5,13 +5,13 @@ import Layout from '@/layout'
 const manageRouter = {
   path: '/manage',
   component: Layout,
-  redirect: 'manage',
+  name: 'VueWork',
   alwaysShow: true,
-  meta: { title: '工作中心', icon: 'shopping' },
+  meta: { title: '工作中心', icon: 'tab' },
   children: [
     {
       path: 'index',
-      name: 'ManageList',
+      name: 'VueList',
       component: () => import('@/views/manage/index'),
       meta: {
         title: '业务大厅',
@@ -22,7 +22,7 @@ const manageRouter = {
     {
       path: 'list/:id(\\d+)',
       component: () => import('@/views/manage/list'),
-      name: 'list',
+      name: 'VueLists',
       meta: {
         title: '业务办理',
         noCache: true

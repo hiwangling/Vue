@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div style="margin:0 0 10px 0">
-      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加服务</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加服务信息</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" width="110" label="订单号" prop="order_no" />

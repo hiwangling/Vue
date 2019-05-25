@@ -5,13 +5,13 @@ import Layout from '@/layout'
 const serviceRouter = {
   path: '/service',
   component: Layout,
-  redirect: 'service',
+  name: 'VueService',
   alwaysShow: true,
   meta: { title: '服务设置', icon: 'list' },
   children: [
     {
       path: 'service-info',
-      name: 'ServiceInfo',
+      name: 'VueInfo',
       component: () => import('@/views/service/service-info'),
       meta: {
         title: '服务项目',
@@ -21,7 +21,7 @@ const serviceRouter = {
     },
     {
       path: 'service-combo',
-      name: 'ServiceCombo',
+      name: 'VueCombo',
       component: () => import('@/views/service/service-combo'),
       meta: {
         title: '服务套餐',

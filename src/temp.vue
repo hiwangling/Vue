@@ -13,7 +13,7 @@
       </el-table-column>
     </el-table>
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
-      <el-form ref="dataForm" :rules="rules" status-icon label-position="left" label-width="80px" style="width: 600px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" status-icon :model="dataForm" label-position="left" label-width="80px" style="width: 600px; margin-left:50px;">
         <el-form-item label="开始时间">
           <el-date-picker
             v-model="dataForm.order_begin"
@@ -33,12 +33,12 @@
         <el-form-item label="费用">
           <el-input v-model="dataForm.price" />
         </el-form-item>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>
-          <el-button v-else type="primary" @click="updateData">确定</el-button>
-        </div>
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>
+        <el-button v-else type="primary" @click="updateData">确定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -98,7 +98,6 @@ export default {
     handleCreate() {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
-      this.findlink()
     },
     createData() {
 

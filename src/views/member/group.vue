@@ -14,8 +14,14 @@
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button v-permission="['POST /api/v1/branch/edit']" type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-permission="['GET /api/v1/branch/del']" type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
-          <el-button v-permission="['POST /api/v1/auth_rule/all']" type="primary" size="mini" @click="handlePermission(scope.row)">授权</el-button>
+          <template v-if="scope.row.id !== 1">
+            <el-button v-permission="['POST /api/v1/auth_rule/all']" type="primary" size="mini" @click="handlePermission(scope.row)">授权</el-button>
+            <el-button v-permission="['GET /api/v1/branch/del']" type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+          <template v-else>
+            <el-button v-permission="['GET /api/v1/auth_rule/all']" type="info" plain disabled size="mini">授权</el-button>
+            <el-button v-permission="['GET /api/v1/branch/del']" type="info" plain disabled size="mini">删除</el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -67,7 +73,7 @@
 import { listRole, createRole, updateRole, deleteRole, getPermission, updatePermission } from '@/api/role'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'CemeteryGroup',
+  name: 'VueGroup',
   components: { Pagination },
   data() {
     return {

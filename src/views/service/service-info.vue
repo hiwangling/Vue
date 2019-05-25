@@ -44,7 +44,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="负责部门" prop="deptid">
-          <el-select v-model="dataForm.deptid" clearable placeholder="请选择">
+          <el-select v-model="dataForm.deptid" multiple placeholder="请选择">
             <el-option
               v-for="item in roleOptions"
               :key="item.id"
@@ -88,7 +88,7 @@ import { roleOptions } from '@/api/role'
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'ServiceInfo',
+  name: 'ServiceCombo',
   components: { Pagination },
   data() {
     return {
@@ -112,7 +112,7 @@ export default {
         showtype: 1,
         list_value: '',
         pricetype: '',
-        deptid: ''
+        deptid: null
       },
       dialogFormVisible: false,
       dialogStatus: '',

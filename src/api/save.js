@@ -32,3 +32,18 @@ export function deleteSave(query) {
   })
 }
 
+export function PaySave(data) {
+  return request({
+    url: '/save/jiesuan',
+    method: 'post',
+    data
+  })
+}
+
+export function GoSave(data) {
+  return request({
+    url: '/save/jiesuan',
+    method: 'post',
+    data
+  })
+}

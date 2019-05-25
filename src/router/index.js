@@ -8,7 +8,7 @@ import cemeteryRouter from './modules/cemetery'
 import memberRouter from './modules/member'
 import serviceRouter from './modules/service'
 import manageRouter from './modules/manage'
-import saveRouter from './modules/save'
+import sellRouter from './modules/sell'
 
 export const constantRoutes = [
   {
@@ -59,8 +59,8 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   manageRouter,
+  sellRouter,
   cemeteryRouter,
-  saveRouter,
   serviceRouter,
   memberRouter,
   { path: '*', redirect: '/404', hidden: true }

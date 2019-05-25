@@ -42,7 +42,7 @@ import { listGarden, createGarden, updateGarden, deleteGarden } from '@/api/gard
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'CemeteryGarden',
+  name: 'VueGarden',
   components: { Pagination },
   data() {
     return {

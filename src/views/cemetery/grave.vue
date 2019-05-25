@@ -50,7 +50,7 @@
 
     <!-- 添加或修改对话框 -->
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :inline="true" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="margin-left:50px;">
         <el-form-item label="墓号" prop="vno">
           <el-input v-model="dataForm.vno" />
         </el-form-item>
@@ -136,7 +136,7 @@ import { get_gardens, get_areas, get_styles, get_types, get_status } from '@/api
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'CemeteryGrave',
+  name: 'VueArea',
   components: { Pagination },
   filters: {
     statusFilter(status) {

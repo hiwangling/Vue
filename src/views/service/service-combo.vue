@@ -56,7 +56,7 @@ import { listCombo, createCombo, updateCombo, deleteCombo, getCombo } from '@/ap
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'ServiceCombo',
+  name: 'VueCombo',
   components: { Pagination },
   data() {
     return {

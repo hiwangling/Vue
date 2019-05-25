@@ -44,7 +44,7 @@
 
     <!-- 添加或修改对话框 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :inline="true" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="管理员账号" prop="username">
           <el-input v-model="dataForm.username" />
         </el-form-item>
@@ -95,7 +95,7 @@ import { roleOptions } from '@/api/role'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'CemeteryManager',
+  name: 'VueManager',
   components: { Pagination },
   filters: {
     statusFilter(status) {

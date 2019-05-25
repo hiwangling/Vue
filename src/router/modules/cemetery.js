@@ -5,13 +5,13 @@ import Layout from '@/layout'
 const cemeteryRouter = {
   path: '/cemetery',
   component: Layout,
-  redirect: 'cemetery',
   alwaysShow: true,
+  name: 'vueCemetery',
   meta: { title: '公墓管理', icon: 'component' },
   children: [
     {
       path: 'garden',
-      name: 'CemeteryGarden',
+      name: 'VueGarden',
       component: () => import('@/views/cemetery/garden'),
       meta: {
         title: '墓园管理',
@@ -21,7 +21,7 @@ const cemeteryRouter = {
     },
     {
       path: 'area',
-      name: 'CemeteryArea',
+      name: 'VueArea',
       component: () => import('@/views/cemetery/area'),
       meta: {
         title: '墓区管理',
@@ -31,7 +31,7 @@ const cemeteryRouter = {
     },
     {
       path: 'grave',
-      name: 'grave',
+      name: 'VueGrave',
       component: () => import('@/views/cemetery/grave'),
       meta: {
         title: '墓穴管理',
@@ -41,7 +41,7 @@ const cemeteryRouter = {
     },
     {
       path: 'style',
-      name: 'CemeteryStyle',
+      name: 'VueStyle',
       component: () => import('@/views/cemetery/style'),
       meta: {
         title: '样式管理',
@@ -51,7 +51,7 @@ const cemeteryRouter = {
     },
     {
       path: 'type',
-      name: 'CemeteryType',
+      name: 'VueType',
       component: () => import('@/views/cemetery/type'),
       meta: {
         title: '类型管理',

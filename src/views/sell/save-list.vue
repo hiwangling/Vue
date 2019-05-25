@@ -3,7 +3,7 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container">
       <el-input v-model="listQuery.keyword" clearable class="filter-item" style="width: 200px;" placeholder="请输入寄存人或墓号" />
-      <el-select v-model="listQuery.save_status" placeholder="选择寄存状态" clearable style="width: 120px" class="filter-item">
+      <el-select v-model="listQuery.save_status" placeholder="选择寄存状态" clearable style="width: 150px" class="filter-item">
         <el-option v-for="item in save" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
@@ -34,9 +34,10 @@
       </el-table-column>
       <el-table-column align="center" label="到期时间" prop="order_state" width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.guoqi_status | statusFilter">
+          <el-tag v-if="scope.row.guoqi_status" :type="scope.row.guoqi_status | statusFilter">
             {{ scope.row.guoqi_days }}
           </el-tag>
+          <el-tag v-else>已到期</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -45,10 +46,11 @@
 </template>
 <script>
 import { listSave } from '@/api/save'
+// import { get_name } from '@/api/cemetery'
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'CemeteryGarden',
+  name: 'VueSaveList',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -82,6 +84,7 @@ export default {
     }
   },
   computed: {
+
   },
   created() {
     this.getList()
@@ -100,6 +103,9 @@ export default {
           this.total = 0
           this.listLoading = false
         })
+    },
+    formatter(row) {
+
     },
     handleFilter() {
       this.listQuery.page = 1

@@ -5,13 +5,13 @@ import Layout from '@/layout'
 const memberRouter = {
   path: '/member',
   component: Layout,
-  redirect: 'member',
   alwaysShow: true,
+  name: 'VueMember',
   meta: { title: '系统设置', icon: 'peoples' },
   children: [
     {
       path: 'group',
-      name: 'CemeteryGroup',
+      name: 'VueGroup',
       component: () => import('@/views/member/group'),
       meta: {
         title: '部门管理',
@@ -21,7 +21,7 @@ const memberRouter = {
     },
     {
       path: 'manager',
-      name: 'CemeteryManager',
+      name: 'VueManager',
       component: () => import('@/views/member/manager'),
       meta: {
         title: '员工管理',

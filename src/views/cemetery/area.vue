@@ -77,7 +77,7 @@ import { listArea, createArea, updateArea, deleteArea, get_gardens } from '@/api
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'CemeteryArea',
+  name: 'VueArea',
   components: { Pagination },
   data() {
     return {

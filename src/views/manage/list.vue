@@ -12,18 +12,21 @@
       <el-tag class="sold">已售(22)</el-tag>
     </div>
     <el-row type="flex" class="row-bg">
-      <div v-for="(item,value) in list" :key="value" @click="CreateCemetery(item)">
-        <el-col :span="2" class="bg-gaid">
+
+      <el-col v-for="(item,value) in list" :key="value" :span="6" class="bg-gaid">
+        <div style="height:100%" @click="CreateCemetery(item)">
           <p>墓号：{{ item.vno }}</p>
           <p>墓型：{{ item.cemetery_type.type_name }}</p>
-        </el-col>
-      </div>
+        </div>
+      </el-col>
+
     </el-row>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog id="cemetery" :title="dialogStatus" :visible.sync="dialogFormVisible" @open="activeName = 'sell'">
+    <el-dialog id="cemetery" :title="dialogStatus" :visible.sync="dialogFormVisible" @open="activeName = 'reserve'">
       <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="预定" name="reserve"><reserve /></el-tab-pane>
         <el-tab-pane label="购墓" name="sell"><sell /></el-tab-pane>
         <el-tab-pane label="殡葬服务" name="service"><service /></el-tab-pane>
         <el-tab-pane label="寄存" name="save"><save /></el-tab-pane>
@@ -34,20 +37,22 @@
 </template>
 <script>
 import { listGrave } from '@/api/grave'
+import { get_name } from '@/api/cemetery'
 import Pagination from '@/components/Pagination'
 import Service from './service/service'
 import Sell from './sell/sell'
 import Save from './save/save'
+import Reserve from './reserve/reserve'
 import monumental from './monumen/monumen'
 export default {
-  name: 'ManageList',
-  components: { Pagination, Service, Sell, Save, monumental },
+  name: 'VueLists',
+  components: { Pagination, Service, Sell, Reserve, Save, monumental },
   data() {
     return {
       list: null,
       total: 0,
       cid: '',
-      activeName: 'sell',
+      activeName: 'reserve',
       listLoading: true,
       listQuery: {
         page: 1,
@@ -85,7 +90,11 @@ export default {
     CreateCemetery(item) {
       this.$store.dispatch('cemetery/pay', item.id)
       this.$store.dispatch('cemetery/addCemetery', item)
-      this.dialogStatus = item.vno + '号'
+      const data = { cid: item.id }
+      get_name(data)
+        .then(response => {
+          this.dialogStatus = response.data.name
+        })
       this.dialogFormVisible = true
     },
     handleClick(tab) {
@@ -107,7 +116,7 @@ export default {
   color: #fff;
   margin: 5px;
   padding: 5px;
-  min-width: 120px;
+  /* min-width: 120px; */
   font-size: 16px;
   height: 120px;
   border-radius: 5px;

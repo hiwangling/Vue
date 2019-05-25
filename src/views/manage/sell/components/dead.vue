@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-button v-if="list ? (list[0] ? list[0].type_id > list.length : true) : true" class="filter-item" type="primary" icon="el-icon-edit" style="margin:10px 0" @click="handleBury">添加墓主信息</el-button>
-    <el-button v-else type="info" plain disabled style="margin:10px 0">墓位信息 ({{ typeStatus.type_name }})</el-button>
+    <el-button v-else type="info" plain disabled style="margin:10px 0">墓位信息 </el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="姓名" prop="vcname" />
       <el-table-column align="center" label="性别" prop="sex" />
@@ -16,7 +16,7 @@
       </el-table-column>
     </el-table>
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
-      <el-form v-if="list ? list.length>0 : true" ref="dataFormEdit" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
+      <el-form v-if="list ? list.length>0 : true" ref="dataFormEdit" :inline="true" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
         <el-form-item label="墓主">
           <el-input v-model="dataFormEdit.vcname" />
         </el-form-item>
@@ -70,7 +70,7 @@
           </el-form>
         </div>
         <div class="el-divider el-divider--horizontal"><div class="el-divider__text is-left">墓主信息</div></div>
-        <el-form ref="dataForm" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
+        <el-form ref="dataForm" :inline="true" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
           <div v-for="(index,item) in type_id" :key="index" style="height:120px">
             <el-form-item :label="'墓主(' + index + ')'">
               <el-input v-model="dataForm[item].vcname" />
@@ -157,16 +157,16 @@ export default {
     },
     payStatus() {
       return this.$store.state.cemetery.pay
-    },
-    typeStatus() {
-      let obj = null
-      if (this.cemeteryType) {
-        obj = this.cemeteryType.find((item) => {
-          return item.hrm === this.type_id
-        })
-      }
-      return obj
     }
+    // typeStatus() {
+    //   let obj = null
+    //   if (this.cemeteryType) {
+    //     obj = this.cemeteryType.find((item) => {
+    //       return item.hrm === this.type_id
+    //     })
+    //   }
+    //   return obj
+    // }
   },
   watch: {
     cems: {

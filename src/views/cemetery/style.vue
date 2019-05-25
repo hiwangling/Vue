@@ -43,7 +43,7 @@ import { listStyle, createStyle, updateStyle, deleteStyle } from '@/api/style'
 import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'CemeteryStyle',
+  name: 'VueStyle',
   components: { Pagination },
   data() {
     return {

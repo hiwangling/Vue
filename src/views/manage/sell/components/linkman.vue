@@ -16,7 +16,7 @@
     <!-- 增加联系人 -->
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" append-to-body top="5vh">
       <div class="linkman">
-        <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;" class="dataFormman">
+        <el-form ref="dataForm" :inline="true" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;" class="dataFormman">
           <el-form-item label="联系人姓名" prop="link_name">
             <el-input v-model="dataForm.link_name" />
           </el-form-item>

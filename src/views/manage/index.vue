@@ -31,6 +31,7 @@
 <script>
 import { listArea } from '@/api/area'
 export default {
+  name: 'VueList',
   data() {
     return {
       list: null,
