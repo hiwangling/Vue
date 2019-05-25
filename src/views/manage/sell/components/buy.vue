@@ -71,6 +71,7 @@
 <script>
 import { addbuy, listbuy, editbuy, deletebuy, pay } from '@/api/buy'
 import { listlink } from '@/api/link'
+import { mapState } from 'vuex'
 export default {
   filters: {
     statusFilter(status) {
@@ -83,6 +84,7 @@ export default {
   },
   data() {
     return {
+      index: 1,
       list: null,
       listlink: null,
       listLoading: true,
@@ -105,12 +107,11 @@ export default {
     }
   },
   computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
-    },
-    payStatus() {
-      return this.$store.state.cemetery.pay
-    }
+    ...mapState('cemetery', {
+      cems: state => state.cems,
+      order: state => state.order,
+      payStatus: state => state.pay
+    })
   },
   watch: {
     cems: {

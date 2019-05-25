@@ -44,9 +44,11 @@
 </template>
 <script>
 import { listlink, createlink, updatelink, deletelink } from '@/api/link'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
+      index: 1,
       list: null,
       listLoading: true,
       dialogFormVisible: false,
@@ -69,17 +71,18 @@ export default {
     }
   },
   computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
-    }
+    ...mapState('cemetery', {
+      cems: state => state.cems,
+      order: state => state.order
+    })
   },
   watch: {
-    cems(val) {
-      this.getList()
+    cems: {
+      handler(val) {
+        this.getList()
+      },
+      immediate: true
     }
-  },
-  created() {
-    this.getList()
   },
   methods: {
     getList() {

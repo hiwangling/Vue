@@ -44,7 +44,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="负责部门" prop="deptid">
-          <el-select v-model="dataForm.deptid" multiple placeholder="请选择">
+          <el-select v-model="dataForm.deptid" placeholder="请选择">
             <el-option
               v-for="item in roleOptions"
               :key="item.id"

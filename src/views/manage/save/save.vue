@@ -23,12 +23,11 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="到期时间" prop="order_state" width="120">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.guoqi_status" :type="scope.row.guoqi_status | statusFilter">
+      <el-table-column align="center" label="到期时间" prop="guoqi_status" width="120">
+        <template v-if="scope.row.guoqi_days" slot-scope="scope">
+          <el-tag :type="scope.row.guoqi_status | statusFilter">
             {{ scope.row.guoqi_days }}
           </el-tag>
-          <el-tag v-else>已到期</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="220">
@@ -98,6 +97,7 @@
 <script>
 import { listlink } from '@/api/link'
 import { updateSave, createSave, listSave, deleteSave, PaySave } from '@/api/save'
+import { mapState } from 'vuex'
 export default {
   filters: {
     statusFilter(status) {
@@ -110,6 +110,7 @@ export default {
   },
   data() {
     return {
+      index: 3,
       list: null,
       listlink: null,
       listLoading: true,
@@ -137,9 +138,10 @@ export default {
     }
   },
   computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
-    }
+    ...mapState('cemetery', {
+      cems: state => state.cems,
+      order: state => state.order
+    })
   },
   watch: {
     cems: {

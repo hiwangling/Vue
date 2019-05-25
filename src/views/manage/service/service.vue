@@ -41,6 +41,7 @@
 <script>
 import ServiceSelect from './components/ServiceSelect'
 import { getsevices, delservices, payservices } from '@/api/buy-service'
+import { mapState } from 'vuex'
 export default {
   filters: {
     statusFilter(status) {
@@ -54,6 +55,7 @@ export default {
   components: { ServiceSelect },
   data() {
     return {
+      index: 2,
       list: null,
       linkman_id: '',
       listlink: '',
@@ -68,9 +70,10 @@ export default {
     }
   },
   computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
-    }
+    ...mapState('cemetery', {
+      cems: state => state.cems,
+      order: state => state.order
+    })
   },
   watch: {
     cems: {

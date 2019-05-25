@@ -70,9 +70,9 @@
           </el-form>
         </div>
         <div class="el-divider el-divider--horizontal"><div class="el-divider__text is-left">墓主信息</div></div>
-        <el-form ref="dataForm" :inline="true" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
-          <div v-for="(index,item) in type_id" :key="index" style="height:120px">
-            <el-form-item :label="'墓主(' + index + ')'">
+        <el-form ref="dataForm" :inline="true" :rules="rules" status-icon label-position="left" label-width="100px" style="margin-left:50px;">
+          <div v-for="(idx,item) in type_id" :key="idx" style="height:120px">
+            <el-form-item :label="'墓主(' + idx + ')'">
               <el-input v-model="dataForm[item].vcname" />
             </el-form-item>
             <el-form-item label="性别">
@@ -121,10 +121,12 @@
 </template>
 <script>
 import { listType } from '@/api/type'
+import { mapState } from 'vuex'
 import { adddead, listdead, deletedead, updatedead } from '@/api/dead'
 export default {
   data() {
     return {
+      index: 1,
       list: null,
       listLoading: true,
       type_id: 2,
@@ -152,12 +154,11 @@ export default {
     }
   },
   computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
-    },
-    payStatus() {
-      return this.$store.state.cemetery.pay
-    }
+    ...mapState('cemetery', {
+      cems: state => state.cems,
+      order: state => state.order,
+      payStatus: state => state.pay
+    })
     // typeStatus() {
     //   let obj = null
     //   if (this.cemeteryType) {
@@ -172,13 +173,14 @@ export default {
     cems: {
       handler(val) {
         this.getList()
+        this.Creattype()
         this.SeleteCeme(this.type_id)
       },
       immediate: true
     }
   },
   created() {
-    this.Creattype()
+
   },
   methods: {
     getList() {

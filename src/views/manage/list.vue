@@ -98,7 +98,7 @@ export default {
       this.dialogFormVisible = true
     },
     handleClick(tab) {
-      // console.log(tab.index)
+      this.$store.dispatch('cemetery/changeOrders', tab.index)
     }
   }
 }

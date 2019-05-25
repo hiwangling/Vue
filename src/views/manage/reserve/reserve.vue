@@ -51,9 +51,11 @@
 </template>
 <script>
 import { listReserve, createReserve, updateReserve, deleteReserve } from '@/api/reserve'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
+      index: 0,
       list: null,
       listLoading: true,
       dialogStatus: '',
@@ -77,9 +79,10 @@ export default {
     }
   },
   computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
-    }
+    ...mapState('cemetery', {
+      cems: state => state.cems,
+      order: state => state.order
+    })
   },
   watch: {
     cems: {
