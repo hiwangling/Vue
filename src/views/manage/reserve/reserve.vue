@@ -9,6 +9,13 @@
       <el-table-column align="center" label="联系电话" prop="phone" />
       <el-table-column align="center" label="开始时间" prop="ordainbegin" />
       <el-table-column align="center" label="到期时间" prop="ordainend" />
+      <el-table-column align="center" label="预定状态" prop="guoqi_status" width="120">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.guoqi_status | statusFilter">
+            {{ scope.row.guoqi_days }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="150">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -53,6 +60,15 @@
 import { listReserve, createReserve, updateReserve, deleteReserve } from '@/api/reserve'
 import { mapState } from 'vuex'
 export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        1: 'danger',
+        0: 'success'
+      }
+      return statusMap[status]
+    }
+  },
   data() {
     return {
       index: 0,
@@ -148,15 +164,17 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          delete this.dataForm['guoqi_days']
+          delete this.dataForm['guoqi_status']
           updateReserve(this.dataForm)
             .then((response) => {
-              for (const v of this.list) {
-                if (v.id === response.data.id) {
-                  const index = this.list.indexOf(v)
-                  this.list.splice(index, 1, response.data)
-                  break
-                }
-              }
+              // for (const v of this.list) {
+              //   if (v.id === response.data.id) {
+              //     const index = this.list.indexOf(v)
+              //     this.list.splice(index, 1, response.data)
+              //     break
+              //   }
+              // }
               this.dialogFormVisible = false
               this.getList()
               this.$notify.success({
