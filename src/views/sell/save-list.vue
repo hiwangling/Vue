@@ -10,8 +10,8 @@
     </div>
     <!-- 查询结果 -->
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
-      <!-- <el-table-column align="center" label="墓号" prop="cid" width="80" /> -->
-      <el-table-column align="center" label="名称" prop="link_name" width="80" />
+      <!-- <el-table-column align="center" label="墓号" prop="cid" width="200" /> -->
+      <el-table-column align="center" label="联系人" prop="link_name" width="80" />
       <el-table-column align="center" label="关系" prop="relation" width="50" />
       <el-table-column align="center" label="联系电话" prop="phone" />
       <el-table-column align="center" label="家庭地址" prop="address" />
@@ -94,6 +94,13 @@ export default {
       listSave(this.listQuery)
         .then(response => {
           this.list = response.data.data
+          // this.list.forEach((val, key) => {
+          //   const data = { cid: val.cid }
+          //   get_name(data)
+          //     .then(response => {
+          //       this.list[key].cid = response.data.name
+          //     })
+          // })
           this.total = response.data.total
           this.listLoading = false
         })
@@ -102,9 +109,6 @@ export default {
           this.total = 0
           this.listLoading = false
         })
-    },
-    formatter(row) {
-
     },
     handleFilter() {
       this.listQuery.page = 1

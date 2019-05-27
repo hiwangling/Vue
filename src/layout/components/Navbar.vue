@@ -141,7 +141,7 @@ export default {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          //border-radius: 10px;
         }
 
         .el-icon-caret-bottom {

@@ -60,7 +60,7 @@ const actions = {
         }
         commit('SET_ROLES', data.roles)
         commit('SET_NAME', data.manager_info.username)
-        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?')
+        commit('SET_AVATAR', 'http://img.soogif.com/0whkGm7bQqCwgKJJ6RyR9hMpbq6AqL1C.gif')
         commit('SET_INTRODUCTION', data.manager_info.email)
         resolve(data)
       }).catch(error => {

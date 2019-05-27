@@ -75,7 +75,6 @@ export default {
         left: 700,
         top: 10
       }
-      console.log(this.content)
       this.content.push(horizontal)
     },
     rest() {
