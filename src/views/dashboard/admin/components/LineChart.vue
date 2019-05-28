@@ -107,7 +107,7 @@ export default {
           }
         },
         legend: {
-          data: ['月度销售额', '年度销售额']
+          data: ['月度销售额']
         },
         series: [{
           name: '月度销售额', itemStyle: {
@@ -124,26 +124,6 @@ export default {
           data: expectedData,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
-        },
-        {
-          name: '年度销售额',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
         }]
       })
     },

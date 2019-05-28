@@ -17,10 +17,10 @@
               <img :src="item.img" alt="" class="image">
             </div>
             <div class="manage-tag">
-              <el-tag type="success">待售(22)</el-tag>
-              <el-tag>预定(22)</el-tag>
-              <el-tag type="warning">安葬(22)</el-tag>
-              <el-tag type="danger">已售(22)</el-tag>
+              <el-tag class="reserve">预定(22)</el-tag>
+              <el-tag class="bury">待售(22)</el-tag>
+              <el-tag class="sold">已售(22)</el-tag>
+              <el-tag class="sell">安葬(22)</el-tag>
             </div>
           </el-card>
         </router-link>

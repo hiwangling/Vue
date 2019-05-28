@@ -7,7 +7,7 @@ const sellRouter = {
   component: Layout,
   alwaysShow: true,
   name: 'vueSell',
-  meta: { title: '销售管理', icon: 'shopping' },
+  meta: { title: '订单管理', icon: 'shopping' },
   children: [
     {
       path: 'reserve-list',
@@ -35,7 +35,7 @@ const sellRouter = {
       meta: {
         title: '服务管理',
         noCache: true,
-        perms: ['GET /api/v1/save/list']
+        perms: ['GET /api/v1/service_info/service_infos_by_cemetery']
       }
     }
   ]

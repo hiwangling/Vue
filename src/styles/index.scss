@@ -206,9 +206,9 @@ aside {
 .dialog .el-dialog__body{
    min-height: 110px;
 }
-.dialog .el-dialog{
-  width: 900px;
-}
+// .dialog .el-dialog{
+//   width: 900px;
+// }
 .dialog .el-date-editor.el-input{
   width: auto!important;
 }
@@ -225,28 +225,48 @@ aside {
 .el-form-item--medium .el-form-item__label{
   text-align: center
 }
-.sell {
-  background-color: rgba(64,151,170, 0.1);
-  border-color: rgba(64,151,170, 0.2);
-  color: #4097AA;
+.bury {
+  background-color:rgb(64,151,170)!important;
+  border-color:rgb(64,151,170)!important;
+  color:#fff!important;
 }
-
+.reserve{
+  background-color:rgb(243,156,18)!important;
+  border-color:rgb(243,156,18)!important;
+  color:#fff!important;
+}
 .sold{
-  background-color: rgba(250,149,131, 0.1);
-  border-color: rgba(250,149,131, 0.2);
-  color: #FA9583;
+  background-color:#b9394c!important;
+  border-color: #b9394c!important;
+  color: #fff!important;
 }
 
-.bury{
- background-color: rgba(47,65,89, 0.1);
-  border-color: rgba(47,65,89, 0.2);
-  color: #2F4159;
+.sell{
+ background-color: #42b983!important;
+  border-color: #42b983!important;
+  color: #fff!important;
 }
 .ele{
   background: url(../assets/img/ele.png) 0 100% repeat-x;
   padding-bottom: 5px;
   margin-bottom: 15px;
 }
+
+.manage-tag{
+  margin-bottom: 20px
+}
+.bg-gaid{
+  margin: 5px;
+  padding: 5px;
+  font-size: 16px;
+  height: 120px;
+  border-radius: 5px;
+}
+.bg-gaid p{
+  margin: 5px 0;
+}
+
+
 .el-divider--horizontal {
   display: block;
   height: 1px;
