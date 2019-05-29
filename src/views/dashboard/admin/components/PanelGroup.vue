@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             待售墓穴
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="num ? num[1] : null" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,7 +22,7 @@
           <div class="card-panel-text">
             已售墓穴
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="num ? num[3] : null" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,9 +33,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            月销售额
+            预订墓穴
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="num ? num[2] : null" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -46,9 +46,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            预订墓穴
+            待办事项
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="count" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,10 +57,26 @@
 
 <script>
 import CountTo from 'vue-count-to'
-
+import { AllCount, AllDai } from '@/api/stats'
 export default {
   components: {
     CountTo
+  },
+  data() {
+    return {
+      count: null,
+      num: null
+    }
+  },
+  created() {
+    AllDai()
+      .then(response => {
+        this.count = response.data.count
+      })
+    AllCount()
+      .then(response => {
+        this.num = response.data
+      })
   },
   methods: {
     handleSetLineChartData(type) {

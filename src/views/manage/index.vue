@@ -1,26 +1,23 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.keyword" placeholder="选择墓园" clearable style="width: 160px" class="filter-item">
-        <el-option v-for="item in garden" :key="item.id" :label="item.name" :value="item.id" />
+      <el-select v-model="listQuery.pid" placeholder="选择墓园" clearable style="width: 160px" class="filter-item">
+        <el-option v-for="item in gardens" :key="item.id" :label="item.type_name" :value="item.id" />
       </el-select>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
     </div>
-    <el-row :gutter="20">
-      <el-col v-for="(item, index) in list" :key="index" :span="6">
+    <el-row :gutter="20" class="area">
+      <el-col v-for="(item, index) in list" :key="index" :span="4">
         <router-link :to="'/manage/list/'+item.id" class="">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>{{ item.type_name }}</span>
+              <span>{{ item.type_name }} ({{ item.y_name }})</span>
             </div>
             <div class="component-item">
               <img :src="item.img" alt="" class="image">
             </div>
             <div class="manage-tag">
-              <el-tag class="reserve">预定(22)</el-tag>
-              <el-tag class="bury">待售(22)</el-tag>
-              <el-tag class="sold">已售(22)</el-tag>
-              <el-tag class="sell">安葬(22)</el-tag>
+              <el-tag v-for="(value,items,idx) in item.num" :key="idx" :class="items | getNum" style="margin-left:5px">{{ items | getNumtxt }}({{ value }})</el-tag>
             </div>
           </el-card>
         </router-link>
@@ -30,6 +27,7 @@
 </template>
 <script>
 import { listArea } from '@/api/area'
+import { get_gardens } from '@/api/cemetery'
 export default {
   name: 'VueList',
   data() {
@@ -37,14 +35,11 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
-      garden: [{
-        id: '',
-        name: '长青园'
-      }],
+      gardens: null,
       listQuery: {
         page: 1,
         limit: 20,
-        keyword: undefined,
+        pid: undefined,
         sort: 'add_time',
         order: 'desc'
       }
@@ -52,16 +47,20 @@ export default {
   },
   created() {
     this.getList()
+    get_gardens()
+      .then(response => {
+        this.gardens = response.data
+      })
   },
   methods: {
     getList() {
       this.listLoading = true
       listArea(this.listQuery)
         .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
-          this.listLoading = false
-          this.list.forEach((v, k) => {
+          response.data.data.forEach((v, k) => {
+            this.list = response.data.data
+            this.total = response.data.total
+            this.listLoading = false
             v.img = 'http://118.25.216.16:88/upload/picture/20181012/2cb24160fd37a94b20d09ce4cca901dd.jpg'
           })
         })
@@ -83,13 +82,7 @@ export default {
  padding: 0 20px;
  min-height: calc(100vh - 84px);
  }
- .box-card{
- padding:5px;
 
- }
-.el-card__body{
-padding:5px;
- }
  .component-item{
    min-height: 100px;
    }

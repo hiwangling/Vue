@@ -6,13 +6,10 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search">查找</el-button>
     </div>
     <div class="manage-tag">
-      <el-tag class="reserve">预定(22)</el-tag>
-      <el-tag class="sell">待售(22)</el-tag>
-      <el-tag class="sold">已售(22)</el-tag>
-      <el-tag class="bury">安葬(22)</el-tag>
+      <el-tag v-for="(value,item,idx) in num" :key="idx" :class="item | getNum" style="margin-left:5px">{{ item | getNumtxt }}({{ value }})</el-tag>
     </div>
     <el-row type="flex" class="row-bg">
-      <el-col v-for="(item,value) in list" :key="value" :span="6" :class="[classA,status[item.usestatus]]">
+      <el-col v-for="(item,value) in list" :key="value" :span="2" :class="item.usestatus | getlist">
         <div style="height:100%;" @click="CreateCemetery(item)">
           <p>墓号：{{ item.vno }}</p>
           <p>墓型：{{ item.cemetery_type.type_name }}</p>
@@ -33,7 +30,7 @@
 </template>
 <script>
 import { listGrave } from '@/api/grave'
-import { get_name } from '@/api/cemetery'
+import { get_name, get_num } from '@/api/cemetery'
 import Pagination from '@/components/Pagination'
 import Service from './service/service'
 import Sell from './sell/sell'
@@ -46,19 +43,13 @@ export default {
   data() {
     return {
       list: null,
+      num: null,
       total: 0,
       cid: '',
-      classA: 'bg-gaid',
-      status: {
-        1: 'sell',
-        2: 'reserve',
-        3: 'sold',
-        4: 'bury'
-      },
       activeName: 'reserve',
       listLoading: true,
       listQuery: {
-        id: this.$route.params.id,
+        q_id: this.$route.params.id,
         page: 1,
         limit: 20,
         keyword: undefined,
@@ -75,6 +66,7 @@ export default {
   },
   created() {
     this.getList()
+    this.CemeteryStatus()
   },
   methods: {
     getList() {
@@ -89,6 +81,13 @@ export default {
           this.list = []
           this.total = 0
           this.listLoading = false
+        })
+    },
+    CemeteryStatus() {
+      const data = { q_id: this.$route.params.id }
+      get_num(data)
+        .then(response => {
+          this.num = response.data
         })
     },
     CreateCemetery(item) {

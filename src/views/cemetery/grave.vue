@@ -134,20 +134,9 @@
 import { listGrave, createGrave, updateGrave, deleteGrave } from '@/api/grave'
 import { get_gardens, get_areas, get_styles, get_types, get_status } from '@/api/cemetery'
 import Pagination from '@/components/Pagination'
-
 export default {
   name: 'VueArea',
   components: { Pagination },
-  filters: {
-    statusFilter(status) {
-      const statusMap = { 1: 'primary', 2: 'warning', 3: 'danger', 4: 'info', 5: 'success' }
-      return statusMap[status]
-    },
-    userstatusFilter(status) {
-      const statusMap = { 1: '待销售', 2: '已预定', 3: '已销售', 4: '已安葬', 5: '迁走' }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       list: null,
@@ -201,10 +190,22 @@ export default {
   },
   created() {
     this.getList()
-    get_gardens().then(res => { this.cemetery.gardens = res.data })
-    get_status().then(res => { this.cemetery.usestatus = res.data })
-    get_styles().then(res => { this.cemetery.styles = res.data })
-    get_types().then(res => { this.cemetery.types = res.data })
+    get_gardens()
+      .then(res => {
+        this.cemetery.gardens = res.data
+      })
+    get_status()
+      .then(res => {
+        this.cemetery.usestatus = res.data
+      })
+    get_styles()
+      .then(res => {
+        this.cemetery.styles = res.data
+      })
+    get_types()
+      .then(res => {
+        this.cemetery.types = res.data
+      })
   },
   methods: {
     getList() {

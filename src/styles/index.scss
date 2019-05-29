@@ -229,29 +229,31 @@ aside {
   background-color:rgb(64,151,170)!important;
   border-color:rgb(64,151,170)!important;
   color:#fff!important;
+  font-size: 16px;
 }
 .reserve{
   background-color:rgb(243,156,18)!important;
   border-color:rgb(243,156,18)!important;
   color:#fff!important;
+  font-size: 16px;
 }
 .sold{
   background-color:#b9394c!important;
   border-color: #b9394c!important;
   color: #fff!important;
+  font-size: 16px;
 }
-
 .sell{
  background-color: #42b983!important;
   border-color: #42b983!important;
   color: #fff!important;
+  font-size: 16px;
 }
 .ele{
   background: url(../assets/img/ele.png) 0 100% repeat-x;
   padding-bottom: 5px;
   margin-bottom: 15px;
 }
-
 .manage-tag{
   margin-bottom: 20px
 }
@@ -265,8 +267,12 @@ aside {
 .bg-gaid p{
   margin: 5px 0;
 }
-
-
+.el-card__body{
+  padding:8px!important;
+   }
+   .clearfix{
+     text-align: center
+   }
 .el-divider--horizontal {
   display: block;
   height: 1px;

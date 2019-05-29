@@ -66,3 +66,42 @@ export function toThousandFilter(num) {
 export function uppercaseFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
+
+export function getNum(status) {
+  const statusMap = {
+    1: 'sell',
+    2: 'reserve',
+    3: 'sold',
+    4: 'bury'
+  }
+  return statusMap[status]
+}
+
+export function getlist(status) {
+  const statusMap = {
+    1: 'sell bg-gaid',
+    2: 'reserve bg-gaid',
+    3: 'sold bg-gaid',
+    4: 'bury bg-gaid'
+  }
+  return statusMap[status]
+}
+
+export function getNumtxt(status) {
+  const statusMap = {
+    1: '待售',
+    2: '预定',
+    3: '已售',
+    4: '安葬'
+  }
+  return statusMap[status]
+}
+
+export function statusFilter(status) {
+  const statusMap = { 1: 'primary', 2: 'warning', 3: 'danger', 4: 'info', 5: 'success' }
+  return statusMap[status]
+}
+export function userstatusFilter(status) {
+  const statusMap = { 1: '待销售', 2: '已预定', 3: '已销售', 4: '已安葬', 5: '迁走' }
+  return statusMap[status]
+}

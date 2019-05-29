@@ -4,6 +4,9 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container">
       <el-input v-model="listQuery.type_name" clearable class="filter-item" style="width: 200px;" placeholder="请输入墓区名称" />
+      <el-select v-model="listQuery.pid" placeholder="选择墓园" clearable style="width: 120px" class="filter-item" @change="getarea()">
+        <el-option v-for="item in gardens" :key="item.id" :label="item.type_name" :value="item.id" />
+      </el-select>
       <el-button v-permission="['GET /api/v1/cemetery_classify/a_list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button v-permission="['POST /api/v1/cemetery_classify/a_add']" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
     </div>
@@ -27,6 +30,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="名称" prop="type_name" />
+      <el-table-column align="center" label="园区" prop="y_name" width="200" />
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="230">
         <template slot-scope="{row}">
           <el-button v-if="row.edit" type="success" size="mini" @click="confirmEdit(row)">
@@ -55,7 +59,7 @@
         <el-form-item label="墓园选择" prop="yid">
           <el-select v-model="dataForm.parent_id" clearable placeholder="请选择">
             <el-option
-              v-for="item in roleOptions"
+              v-for="item in gardens"
               :key="item.id"
               :label="item.type_name"
               :value="item.id"
@@ -73,7 +77,8 @@
   </div>
 </template>
 <script>
-import { listArea, createArea, updateArea, deleteArea, get_gardens } from '@/api/area'
+import { listArea, createArea, updateArea, deleteArea } from '@/api/area'
+import { get_gardens } from '@/api/cemetery'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -83,7 +88,7 @@ export default {
     return {
       list: null,
       total: 0,
-      roleOptions: null,
+      gardens: null,
       listLoading: true,
       listQuery: {
         page: 1,
@@ -94,6 +99,7 @@ export default {
       },
       dataForm: {
         id: undefined,
+        pid: undefined,
         type_name: undefined,
         sort: undefined,
         parent_id: undefined
@@ -115,7 +121,7 @@ export default {
     this.getList()
     get_gardens()
       .then(response => {
-        this.roleOptions = response.data
+        this.gardens = response.data
       })
   },
   methods: {

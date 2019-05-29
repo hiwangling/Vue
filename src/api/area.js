@@ -32,10 +32,3 @@ export function deleteArea(query) {
   })
 }
 
-export function get_gardens(query) {
-  return request({
-    url: '/cemetery_classify/get_gardens',
-    method: 'get',
-    params: query
-  })
-}

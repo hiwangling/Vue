@@ -26,8 +26,8 @@
     </el-table>
     <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
       <el-form ref="dataForm" :inline="true" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="margin-left:50px;">
-        <el-form-item label="联系人" prop="linkman_id">
-          <el-select v-model="dataForm.linkman_id" clearable placeholder="请选择">
+        <el-form-item label="联系人" prop="linkman_id" :rules="[dataForm.link_name ? true : { required: true, message: '联系人不能为空', trigger: 'change' }]">
+          <el-select v-model="dataForm.linkman_id" clearable placeholder="请选择" :disabled="dataForm.link_name ? true : false" @change="changelink">
             <el-option
               v-for="item in listlink"
               :key="item.id"
@@ -35,6 +35,21 @@
               :value="item.id"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item label="联系人" prop="link_name" :rules="[dataForm.linkman_id ? true : { required: true, message: '联系人不能为空', trigger: 'blur' }]">
+          <el-input v-model="dataForm.link_name" :disabled="dataForm.linkman_id ? true : false" />
+        </el-form-item>
+        <el-form-item label="联系人电话">
+          <el-input v-model="dataForm.phone" :disabled="dataForm.linkman_id ? true : false" />
+        </el-form-item>
+        <el-form-item label="关系">
+          <el-input v-model="dataForm.relation" :disabled="dataForm.linkman_id ? true : false" />
+        </el-form-item>
+        <el-form-item label="住址">
+          <el-input v-model="dataForm.address" :disabled="dataForm.linkman_id ? true : false" />
+        </el-form-item>
+        <el-form-item label="销售金额">
+          <el-input v-model="cems.sellprice" :disabled="true" />
         </el-form-item>
         <el-form-item label="购买日期">
           <el-date-picker
@@ -51,9 +66,6 @@
             value-format="yyyy-MM-dd"
             placeholder="选择日期"
           />
-        </el-form-item>
-        <el-form-item label="销售金额">
-          <el-input v-model="cems.sellprice" :disabled="true" />
         </el-form-item>
         <el-form-item label="实收金额">
           <el-input v-model="dataForm.real_price" />
@@ -95,14 +107,18 @@ export default {
         linkman_id: '',
         order_begin: '',
         order_end: '',
-        real_price: ''
+        real_price: '',
+        link_name: '',
+        phone: '',
+        relation: '',
+        address: ''
       },
       textMap: {
         update: '编辑',
         create: '创建'
       },
       rules: {
-        linkman_id: [{ required: true, message: '联系人不能为空', trigger: 'change' }]
+        // linkman_id: [{ required: true, message: '联系人不能为空', trigger: 'change' }]
       }
     }
   },
@@ -169,6 +185,14 @@ export default {
               })
             })
         }
+      })
+    },
+    changelink() {
+      this.$nextTick(() => {
+        this.dataForm.phone = ''
+        this.dataForm.relation = ''
+        this.dataForm.address = ''
+        this.$refs['dataForm'].clearValidate()
       })
     },
     handleUpdate(row) {
@@ -260,7 +284,11 @@ export default {
         linkman_id: '',
         order_begin: '',
         order_end: '',
-        real_price: ''
+        real_price: '',
+        link_name: '',
+        phone: '',
+        relation: '',
+        address: ''
       }
     },
     listlink_() {

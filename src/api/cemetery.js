@@ -48,3 +48,10 @@ export function get_name(query) {
   })
 }
 
+export function get_num(query) {
+  return request({
+    url: '/cemetery/tong_ji_xiao_by_qu',
+    method: 'get',
+    params: query
+  })
+}
