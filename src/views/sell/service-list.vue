@@ -49,8 +49,8 @@
         </el-table-column>
         <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="130">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.resutlstatus === 1" type="primary" size="mini" @click="handleCreate(scope.row.id)">执行</el-button>
-            <el-button v-else type="info" size="mini" plain disabled>已完结</el-button>
+            <el-button v-if="scope.row.resutlstatus === 1" type="danger" size="mini" @click="handleCreate(scope.row.id)">执行</el-button>
+            <el-button v-else type="primary" size="mini">查看</el-button>
           </template>
 
         </el-table-column>
@@ -70,6 +70,20 @@
             placeholder="选择日期"
           />
         </el-form-item>
+        <el-form-item label="上传图片">
+          <span style="color:red">只能上传image/jpeg文件，且不超过2M</span>
+          <el-upload
+            class="avatar-uploader"
+            :headers="headers"
+            :action="uploadPath"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="image_url" :src="image_url" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+        </el-form-item>
         <el-form-item label="服务说明" prop="execnote">
           <el-input v-model="dataForm.execnote" type="textarea" style="width: 250px;" />
         </el-form-item>
@@ -84,6 +98,8 @@
 <script>
 import { AllCemetery, AllCemeteryCid, ExecuteService } from '@/api/to-service'
 // import { get_name } from '@/api/cemetery'
+import { uploadPath } from '@/api/upload'
+import { getToken } from '@/utils/auth'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -100,9 +116,11 @@ export default {
   components: { Pagination },
   data() {
     return {
+      uploadPath,
       list: null,
       list_service: null,
       total: 0,
+      image_url: '',
       listLoading: true,
       listLoading_: true,
       dialogStatus: '',
@@ -119,6 +137,7 @@ export default {
       dataForm: {
         cid: '',
         id: '',
+        image_url: '',
         execdate: '',
         execnote: ''
       },
@@ -128,7 +147,11 @@ export default {
     }
   },
   computed: {
-
+    headers() {
+      return {
+        'token': getToken()
+      }
+    }
   },
   created() {
     this.getList()
@@ -176,6 +199,27 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      //    if (this.dataForm.image_url) {
+      //   this.image_url = process.env.VUE_APP_BASE + this.dataForm.image_url
+      // } else {
+      //   this.image_url = ''
+      // }
+    },
+    handleAvatarSuccess(res, file) {
+      this.image_url = process.env.VUE_APP_BASE + file.response.data
+      this.dataForm.image_url = file.response.data
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
     },
     SendData() {
       this.$refs['dataForm'].validate(valid => {
@@ -208,3 +252,28 @@ export default {
 }
 </script>
 
+<style scope>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

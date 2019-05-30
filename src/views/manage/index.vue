@@ -14,7 +14,7 @@
               <span>{{ item.type_name }} ({{ item.y_name }})</span>
             </div>
             <div class="component-item">
-              <img :src="item.img" alt="" class="image">
+              <img :src="item.image_url" alt="" class="image">
             </div>
             <div class="manage-tag">
               <el-tag v-for="(value,items,idx) in item.num" :key="idx" :class="items | getNum" style="margin-left:5px">{{ items | getNumtxt }}({{ value }})</el-tag>
@@ -57,11 +57,11 @@ export default {
       this.listLoading = true
       listArea(this.listQuery)
         .then(response => {
-          response.data.data.forEach((v, k) => {
-            this.list = response.data.data
-            this.total = response.data.total
-            this.listLoading = false
-            v.img = 'http://118.25.216.16:88/upload/picture/20181012/2cb24160fd37a94b20d09ce4cca901dd.jpg'
+          this.list = response.data.data
+          this.total = response.data.total
+          this.listLoading = false
+          this.list.forEach((v, k) => {
+            v.image_url = process.env.VUE_APP_BASE + v.image_url
           })
         })
         .catch(() => {
@@ -87,7 +87,8 @@ export default {
    min-height: 100px;
    }
 .image {
-    width: 100%;
+    width: 200px;
+    height: 200px;
     display: block;
   }
   .manage-tag{
