@@ -10,14 +10,13 @@
     </div>
     <!-- 查询结果 -->
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
-      <!-- <el-table-column align="center" label="墓号" prop="cid" width="200" /> -->
-      <el-table-column align="center" label="联系人" prop="link_name" width="80" />
-      <el-table-column align="center" label="关系" prop="relation" width="50" />
-      <el-table-column align="center" label="联系电话" prop="phone" />
+      <el-table-column align="center" label="墓名" prop="cemetery_full_name" />
+      <el-table-column align="center" label="联系人" prop="link_name" width="100" />
+      <el-table-column align="center" label="联系电话" prop="phone" width="120" />
       <el-table-column align="center" label="家庭地址" prop="address" />
-      <el-table-column align="center" label="开始时间" prop="savebegindate" />
-      <el-table-column align="center" label="结束时间" prop="saveenddate" />
-      <el-table-column align="center" label="费用" prop="saveprice" width="70" />
+      <el-table-column align="center" label="开始时间" prop="savebegindate" width="120" />
+      <el-table-column align="center" label="结束时间" prop="saveenddate" width="120" />
+      <el-table-column align="center" label="费用" prop="saveprice" width="100" />
       <el-table-column align="center" label="寄存状态" prop="save_status">
         <template slot-scope="scope">
           <el-tag :type="scope.row.save_status | statusFilter">

@@ -66,6 +66,20 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="上传图片">
+          <span style="color:red">只能上传image/jpeg文件，且不超过2M</span>
+          <el-upload
+            class="avatar-uploader"
+            :headers="headers"
+            :action="uploadPath"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="image_url" :src="image_url" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -78,7 +92,9 @@
 </template>
 <script>
 import { listArea, createArea, updateArea, deleteArea } from '@/api/area'
+import { uploadPath } from '@/api/upload'
 import { get_gardens } from '@/api/cemetery'
+import { getToken } from '@/utils/auth'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -86,9 +102,11 @@ export default {
   components: { Pagination },
   data() {
     return {
+      uploadPath,
       list: null,
       total: 0,
       gardens: null,
+      image_url: '',
       listLoading: true,
       listQuery: {
         page: 1,
@@ -100,6 +118,7 @@ export default {
       dataForm: {
         id: undefined,
         pid: undefined,
+        image_url: '',
         type_name: undefined,
         sort: undefined,
         parent_id: undefined
@@ -116,6 +135,11 @@ export default {
     }
   },
   computed: {
+    headers() {
+      return {
+        'token': getToken()
+      }
+    }
   },
   created() {
     this.getList()
@@ -185,6 +209,7 @@ export default {
       this.dataForm = {
         id: undefined,
         type_name: undefined,
+        image_url: '',
         sort: undefined,
         parent_id: undefined
       }
@@ -221,7 +246,11 @@ export default {
     },
     handleUpdate(row) {
       this.dataForm = Object.assign({}, row)
-      console.log(this.dataForm)
+      if (this.dataForm.image_url) {
+        this.image_url = process.env.VUE_APP_BASE + this.dataForm.image_url
+      } else {
+        this.image_url = ''
+      }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -271,7 +300,50 @@ export default {
             message: response.data.msg
           })
         })
+    },
+    handleAvatarSuccess(res, file) {
+      this.image_url = process.env.VUE_APP_BASE + file.response.data
+      this.dataForm.image_url = file.response.data
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
     }
   }
 }
 </script>
+
+<style scope>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
+

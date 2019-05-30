@@ -4,7 +4,7 @@
     <el-button v-else type="info" plain disabled style="margin:10px 0">购墓单信息</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="订单号" prop="order_no" />
-      <el-table-column align="center" width="80" label="购墓人" prop="buyer_name" />
+      <el-table-column align="center" width="80" label="购墓人" prop="link_name" />
       <el-table-column align="center" label="购买日期" prop="order_begin" />
       <el-table-column align="center" label="到期日期" prop="order_end" />
       <el-table-column align="center" width="80" label="销售金额" prop="sell_price" />
@@ -37,16 +37,19 @@
           </el-select>
         </el-form-item>
         <el-form-item label="联系人" prop="link_name" :rules="[dataForm.linkman_id ? true : { required: true, message: '联系人不能为空', trigger: 'blur' }]">
-          <el-input v-model="dataForm.link_name" :disabled="dataForm.linkman_id ? true : false" />
+          <el-input v-model="dataForm.link_name" :disabled="rule" />
         </el-form-item>
         <el-form-item label="联系人电话">
-          <el-input v-model="dataForm.phone" :disabled="dataForm.linkman_id ? true : false" />
+          <el-input v-model="dataForm.phone" :disabled="rule" />
+        </el-form-item>
+        <el-form-item label="身份证">
+          <el-input v-model="dataForm.card_no" :disabled="rule" />
         </el-form-item>
         <el-form-item label="关系">
-          <el-input v-model="dataForm.relation" :disabled="dataForm.linkman_id ? true : false" />
+          <el-input v-model="dataForm.relation" :disabled="rule" />
         </el-form-item>
         <el-form-item label="住址">
-          <el-input v-model="dataForm.address" :disabled="dataForm.linkman_id ? true : false" />
+          <el-input v-model="dataForm.address" :disabled="rule" />
         </el-form-item>
         <el-form-item label="销售金额">
           <el-input v-model="cems.sellprice" :disabled="true" />
@@ -110,6 +113,7 @@ export default {
         real_price: '',
         link_name: '',
         phone: '',
+        card_no: '',
         relation: '',
         address: ''
       },
@@ -127,7 +131,10 @@ export default {
       cems: state => state.cems,
       order: state => state.order,
       payStatus: state => state.pay
-    })
+    }),
+    rule() {
+      return !!this.dataForm.linkman_id
+    }
   },
   watch: {
     cems: {
@@ -192,11 +199,15 @@ export default {
         this.dataForm.phone = ''
         this.dataForm.relation = ''
         this.dataForm.address = ''
+        this.dataForm.card_no = ''
         this.$refs['dataForm'].clearValidate()
       })
     },
     handleUpdate(row) {
       this.dataForm = Object.assign({}, row)
+      if (this.dataForm.linkman_id) {
+        this.dataForm.link_name = ''
+      }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -286,6 +297,7 @@ export default {
         order_end: '',
         real_price: '',
         link_name: '',
+        card_no: '',
         phone: '',
         relation: '',
         address: ''

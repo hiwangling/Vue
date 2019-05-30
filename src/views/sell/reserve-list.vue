@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import { listReserve } from '@/api/reserve'
+import { AllReserve } from '@/api/reserve'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -63,7 +63,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      listReserve(this.listQuery)
+      AllReserve(this.listQuery)
         .then(response => {
           this.list = response.data.data
           this.total = response.data.total

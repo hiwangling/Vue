@@ -32,3 +32,11 @@ export function deleteReserve(query) {
   })
 }
 
+export function AllReserve(query) {
+  return request({
+    url: '/reserve/all_list',
+    method: 'get',
+    params: query
+  })
+}
+
