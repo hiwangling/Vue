@@ -11,7 +11,7 @@
       <el-table-column align="center" label="到期时间" prop="ordainend" />
       <el-table-column align="center" label="预定状态" prop="guoqi_status" width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.guoqi_status | OrStatus">
+          <el-tag :type="scope.row.guoqi_status | or_status">
             {{ scope.row.guoqi_days }}
           </el-tag>
         </template>

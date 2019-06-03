@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column align="center" label="状态" prop="wancheng_status">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.wancheng_status | OrStatus">
+          <el-tag :type="scope.row.wancheng_status | or_status">
             {{ scope.row.wancheng_status == 1 ? '待完成' : '已完成' }}
           </el-tag>
         </template>
@@ -42,7 +42,7 @@
         <el-table-column align="center" label="创建时间" prop="begindate" width="100" />
         <el-table-column align="center" label="状态" prop="resutlstatus" width="100">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.resutlstatus | OrStatus">
+            <el-tag :type="scope.row.resutlstatus | or_status">
               {{ scope.row.resutlstatus == 1 ? '待完成' : '已完成' }}
             </el-tag>
           </template>

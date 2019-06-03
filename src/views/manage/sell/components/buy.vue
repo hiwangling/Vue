@@ -11,7 +11,7 @@
       <el-table-column align="center" width="80" label="实收金额" prop="real_price" />
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template>
-          <el-tag :type="payStatus | OrStatus">
+          <el-tag :type="payStatus | or_status">
             {{ payStatus == 1 ? '未付款' : '已付款' }}
           </el-tag>
         </template>

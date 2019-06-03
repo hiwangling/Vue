@@ -19,21 +19,21 @@
       <el-table-column align="center" label="费用" prop="saveprice" width="100" />
       <el-table-column align="center" label="寄存状态" prop="save_status">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.save_status | OrStatus">
+          <el-tag :type="scope.row.save_status | or_status">
             {{ scope.row.save_status == 1 ? '寄存中' : '已取走' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="付款状态" prop="order_state">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.order_state | OrStatus">
+          <el-tag :type="scope.row.order_state | or_status">
             {{ scope.row.order_state == 1 ? '未付款' : '已付款' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="到期时间" prop="guoqi_status" width="120">
         <template v-if="scope.row.guoqi_days" slot-scope="scope">
-          <el-tag :type="scope.row.guoqi_status | OrStatus">
+          <el-tag :type="scope.row.guoqi_status | or_status">
             {{ scope.row.guoqi_days }}
           </el-tag>
         </template>

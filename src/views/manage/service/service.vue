@@ -15,7 +15,7 @@
       <el-table-column align="center" width="80" label="服务总价" prop="sum_price" />
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.order_status | OrStatus">
+          <el-tag :type="scope.row.order_status | or_status">
             {{ scope.row.order_status == 1 ? '未付款' : '已付款' }}
           </el-tag>
         </template>
