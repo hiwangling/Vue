@@ -91,15 +91,15 @@ export default {
   },
   created() {
     this.getList()
-    getCombo().then(response => { this.getservice = response.data })
+    getCombo().then(res => { this.getservice = res.data })
   },
   methods: {
     getList() {
       this.listLoading = true
       listCombo(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -131,18 +131,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createCombo(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data)
+            .then(res => {
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加套餐成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -175,10 +175,10 @@ export default {
                 message: '更新套餐成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -186,7 +186,7 @@ export default {
     },
     handleDelete(row) {
       deleteCombo(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除套餐成功'
@@ -194,10 +194,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }

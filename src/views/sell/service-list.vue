@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column align="center" label="状态" prop="wancheng_status">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.wancheng_status | statusFilter">
+          <el-tag :type="scope.row.wancheng_status | OrStatus">
             {{ scope.row.wancheng_status == 1 ? '待完成' : '已完成' }}
           </el-tag>
         </template>
@@ -42,7 +42,7 @@
         <el-table-column align="center" label="创建时间" prop="begindate" width="100" />
         <el-table-column align="center" label="状态" prop="resutlstatus" width="100">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.resutlstatus | statusFilter">
+            <el-tag :type="scope.row.resutlstatus | OrStatus">
               {{ scope.row.resutlstatus == 1 ? '待完成' : '已完成' }}
             </el-tag>
           </template>
@@ -104,15 +104,6 @@ import Pagination from '@/components/Pagination'
 
 export default {
   name: 'VueSaveList',
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'danger',
-        0: 'success'
-      }
-      return statusMap[status]
-    }
-  },
   components: { Pagination },
   data() {
     return {
@@ -160,9 +151,9 @@ export default {
     getList() {
       this.listLoading = true
       AllCemetery(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -182,8 +173,8 @@ export default {
       this.dataForm.cid = row.cid
       const data = { cid: row.cid }
       AllCemeteryCid(data)
-        .then(response => {
-          this.list_service = response.data
+        .then(res => {
+          this.list_service = res.data
           this.listLoading_ = false
         })
         .catch(() => {
@@ -206,8 +197,8 @@ export default {
       // }
     },
     handleAvatarSuccess(res, file) {
-      this.image_url = process.env.VUE_APP_BASE + file.response.data
-      this.dataForm.image_url = file.response.data
+      this.image_url = process.env.VUE_APP_BASE + file.res.data
+      this.dataForm.image_url = file.res.data
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
@@ -225,9 +216,9 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           ExecuteService(this.dataForm)
-            .then(response => {
+            .then(res => {
               for (const v of this.list_service) {
-                if (v.id === response.data.id) {
+                if (v.id === res.data.id) {
                   v.resutlstatus = 2
                   break
                 }
@@ -239,10 +230,10 @@ export default {
                 message: '服务执行成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }

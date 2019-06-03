@@ -74,9 +74,9 @@ export default {
     getList() {
       this.listLoading = true
       listGrave(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -88,8 +88,8 @@ export default {
     CemeteryStatus() {
       const data = { q_id: this.$route.params.id }
       get_num(data)
-        .then(response => {
-          this.num = response.data
+        .then(res => {
+          this.num = res.data
         })
     },
     CreateCemetery(item) {
@@ -97,8 +97,8 @@ export default {
       this.addCemetery(item)
       const data = { cid: item.id }
       get_name(data)
-        .then(response => {
-          this.dialogStatus = response.data.name
+        .then(res => {
+          this.dialogStatus = res.data.name
         })
       this.dialogFormVisible = true
     },

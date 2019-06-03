@@ -70,12 +70,12 @@ export default {
   },
   created() {
     AllDai()
-      .then(response => {
-        this.count = response.data.count
+      .then(res => {
+        this.count = res.data.count
       })
     AllCount()
-      .then(response => {
-        this.num = response.data
+      .then(res => {
+        this.num = res.data
       })
   },
   methods: {

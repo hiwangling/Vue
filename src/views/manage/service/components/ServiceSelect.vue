@@ -110,10 +110,10 @@ export default {
     getList() {
       this.listLoading = true
       listService()
-        .then(response => {
-          this.list = response.data.data
+        .then(res => {
+          this.list = res.data.data
           this.listLoading = false
-          const items = response.data.data
+          const items = res.data.data
           this.list = items.map(v => {
             this.$set(v, 'edit', false)
             v.originalTitle = v.sellprice
@@ -153,10 +153,10 @@ export default {
       const data = { id: val }
       this.dialogStatus = 'update'
       getEditService(data)
-        .then(response => {
-          this.order_detail_ids = response.data.order_detail_ids
-          this.dataForm.linkman_id = response.data.linkman_id
-          const service = response.data.services
+        .then(res => {
+          this.order_detail_ids = res.data.order_detail_ids
+          this.dataForm.linkman_id = res.data.linkman_id
+          const service = res.data.services
           service.forEach((v, k) => {
             this.$refs.multipleTable.toggleRowSelection(this.$refs.multipleTable.data.find((item) => item.id === v.id), true)
           })
@@ -176,17 +176,17 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           addservices(data)
-            .then(response => {
+            .then(res => {
               this.$notify.success({
                 title: '成功',
                 message: '添加服务成功'
               })
               this.CloseDialog()
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -203,17 +203,17 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           editservices(data)
-            .then(response => {
+            .then(res => {
               this.$notify.success({
                 title: '成功',
                 message: '编辑服务成功'
               })
               this.CloseDialog()
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -231,8 +231,8 @@ export default {
     findlink() {
       const data = { cid: this.cems.id }
       listlink(data)
-        .then(response => {
-          this.listlink = response.data
+        .then(res => {
+          this.listlink = res.data
         })
         .catch(() => {
           this.listlink = null

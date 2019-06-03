@@ -86,8 +86,8 @@ export default {
         cid: this.cems.id
       }
       listlink(data)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.listLoading = false
         })
         .catch(() => {
@@ -118,18 +118,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createlink(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data)
+            .then(res => {
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加联系人成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -161,10 +161,10 @@ export default {
                 message: '更新联系人成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response
+                message: res
               })
             })
         }
@@ -172,7 +172,7 @@ export default {
     },
     handleDeletelink(row) {
       deletelink(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除联系人成功'
@@ -180,10 +180,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }

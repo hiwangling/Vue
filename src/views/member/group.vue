@@ -118,8 +118,8 @@ export default {
     getList() {
       this.listLoading = true
       listRole(this.listQuery)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.total = 1
           this.listLoading = false
         })
@@ -152,18 +152,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createRole(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data.data)
+            .then(res => {
+              this.list.unshift(res.data.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加部门成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.errmsg
+                message: res.data.errmsg
               })
             })
         }
@@ -195,10 +195,10 @@ export default {
                 message: '更新管理员成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.errmsg
+                message: res.data.errmsg
               })
             })
         }
@@ -206,7 +206,7 @@ export default {
     },
     handleDelete(row) {
       deleteRole(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除管理员成功'
@@ -214,10 +214,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.data.errmsg
+            message: res.data.errmsg
           })
         })
     },
@@ -225,9 +225,9 @@ export default {
       this.permissionDialogFormVisible = true
       this.permissionForm.id = row.id
       getPermission({ id: row.id })
-        .then(response => {
-          this.systemPermissions = response.data.systemPermissions
-          this.assignedPermissions = response.data.assignedPermissions
+        .then(res => {
+          this.systemPermissions = res.data.systemPermissions
+          this.assignedPermissions = res.data.assignedPermissions
         })
     },
     updatePermission() {
@@ -237,17 +237,17 @@ export default {
         this.permissionForm.permissions.push(prem[i].id)
       }
       updatePermission(this.permissionForm)
-        .then(response => {
+        .then(res => {
           this.permissionDialogFormVisible = false
           this.$notify.success({
             title: '成功',
             message: '授权成功'
           })
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.data.errmsg
+            message: res.data.errmsg
           })
         })
     }

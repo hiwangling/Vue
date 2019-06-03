@@ -148,8 +148,8 @@ export default {
   created() {
     this.getList()
     roleOptions()
-      .then(response => {
-        this.roleOptions = response.data
+      .then(res => {
+        this.roleOptions = res.data
       })
   },
   methods: {
@@ -166,9 +166,9 @@ export default {
     getList() {
       this.listLoading = true
       listAdmin(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -206,19 +206,19 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createAdmin(this.dataForm)
-            .then(response => {
-              console.log(response.data)
-              this.list.unshift(response.data)
+            .then(res => {
+              console.log(res.data)
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加管理员成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -250,11 +250,11 @@ export default {
                 message: '更新管理员成功'
               })
             })
-            .catch(response => {
-              console.log(response)
+            .catch(res => {
+              console.log(res)
               this.$notify.error({
                 title: '失败',
-                message: response
+                message: res
               })
             })
         }

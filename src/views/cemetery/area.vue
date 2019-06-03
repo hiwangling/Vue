@@ -144,18 +144,18 @@ export default {
   created() {
     this.getList()
     get_gardens()
-      .then(response => {
-        this.gardens = response.data
+      .then(res => {
+        this.gardens = res.data
       })
   },
   methods: {
     getList() {
       this.listLoading = true
       listArea(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
-          const items = response.data.data
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
+          const items = res.data.data
           this.list = items.map(v => {
             this.$set(v, 'edit', false)
             v.originalTitle = v.sort
@@ -198,10 +198,10 @@ export default {
             type: 'success'
           })
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
@@ -226,19 +226,19 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createArea(this.dataForm)
-            .then(response => {
-              console.log(response.data)
-              this.list.unshift(response.data)
+            .then(res => {
+              console.log(res.data)
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加墓区成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -275,10 +275,10 @@ export default {
                 message: '更新墓区成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -286,7 +286,7 @@ export default {
     },
     handleDelete(row) {
       deleteArea(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除墓区成功'
@@ -294,16 +294,16 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
     handleAvatarSuccess(res, file) {
-      this.image_url = process.env.VUE_APP_BASE + file.response.data
-      this.dataForm.image_url = file.response.data
+      this.image_url = process.env.VUE_APP_BASE + file.res.data
+      this.dataForm.image_url = file.res.data
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'

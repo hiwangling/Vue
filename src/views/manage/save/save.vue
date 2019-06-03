@@ -142,8 +142,8 @@ export default {
       this.listLoading = true
       const data = { cid: this.cems.id }
       listSave(data)
-        .then(response => {
-          this.list = response.data.data
+        .then(res => {
+          this.list = res.data.data
           this.listLoading = false
         })
         .catch(() => {
@@ -174,8 +174,8 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createSave(this.dataForm)
-            .then(response => {
-              // this.list.unshift(response.data)
+            .then(res => {
+              // this.list.unshift(res.data)
               this.getList()
               this.dialogFormVisible = false
               this.$notify.success({
@@ -183,10 +183,10 @@ export default {
                 message: '添加寄存信息成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -205,11 +205,11 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           updateSave(this.dataForm)
-            .then((response) => {
+            .then((res) => {
               // for (const v of this.list) {
-              //   if (v.id === response.data.id) {
+              //   if (v.id === res.data.id) {
               //     const index = this.list.indexOf(v)
-              //     this.list.splice(index, 1, response.data)
+              //     this.list.splice(index, 1, res.data)
               //     break
               //   }
               // }
@@ -220,10 +220,10 @@ export default {
                 message: '更新寄存信息成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response
+                message: res
               })
             })
         }
@@ -231,7 +231,7 @@ export default {
     },
     handleDelete(row) {
       deleteSave(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除寄存信息成功'
@@ -239,10 +239,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
@@ -254,17 +254,17 @@ export default {
       }).then(() => {
         const data = { id: row.id }
         PaySave(data)
-          .then(response => {
+          .then(res => {
             this.$notify.success({
               title: '成功',
               message: '付款服务成功'
             })
             this.getList()
           })
-          .catch(response => {
+          .catch(res => {
             this.$notify.error({
               title: '失败',
-              message: response.msg
+              message: res.msg
             })
           })
       }).catch(() => {
@@ -282,17 +282,17 @@ export default {
       }).then(() => {
         row.save_status = 2
         updateSave(row)
-          .then((response) => {
+          .then((res) => {
             this.getList()
             this.$notify.success({
               title: '成功',
               message: '已取走'
             })
           })
-          .catch(response => {
+          .catch(res => {
             this.$notify.error({
               title: '失败',
-              message: response
+              message: res
             })
           })
       }).catch(() => {
@@ -305,8 +305,8 @@ export default {
     findlink() {
       const data = { cid: this.cems.id }
       listlink(data)
-        .then(response => {
-          this.listlink = response.data
+        .then(res => {
+          this.listlink = res.data
         })
         .catch(() => {
           this.listlink = null

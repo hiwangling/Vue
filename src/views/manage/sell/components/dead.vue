@@ -176,8 +176,8 @@ export default {
         cid: this.cems.id
       }
       listdead(data)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.type_id = this.list[0].type_id
           this.listLoading = false
         })
@@ -212,16 +212,16 @@ export default {
             message: '更新墓主信息成功'
           })
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
     handleDelete(row) {
       deletedead(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除墓主成功'
@@ -229,10 +229,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
@@ -246,12 +246,12 @@ export default {
       }
       const data = this.list.length > 0 ? this.dataFormEdit : Creatdata
       adddead(data)
-        .then(response => {
+        .then(res => {
           if (this.list.length > 0) {
-            this.list.unshift(response.data)
+            this.list.unshift(res.data)
           } else {
-            response.data.forEach((v, k) => {
-              this.list.unshift(response.data[k])
+            res.data.forEach((v, k) => {
+              this.list.unshift(res.data[k])
             })
           }
           this.dialogFormVisible = false
@@ -260,10 +260,10 @@ export default {
             message: '添加购墓信息成功'
           })
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
@@ -307,8 +307,8 @@ export default {
     },
     Creattype() {
       listType()
-        .then(response => {
-          this.cemeteryType = response.data
+        .then(res => {
+          this.cemeteryType = res.data
         })
     }
   }

@@ -127,10 +127,10 @@ export default {
   },
   created() {
     this.getList()
-    typeService().then(response => { this.typeServices = response.data })
+    typeService().then(res => { this.typeServices = res.data })
     roleOptions()
-      .then(response => {
-        this.roleOptions = response.data
+      .then(res => {
+        this.roleOptions = res.data
         this.roleOptions.splice(0, 1)
       })
   },
@@ -138,9 +138,9 @@ export default {
     getList() {
       this.listLoading = true
       listService(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -177,18 +177,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createService(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data)
+            .then(res => {
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加服务成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -221,10 +221,10 @@ export default {
                 message: '更新服务成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -232,7 +232,7 @@ export default {
     },
     handleDelete(row) {
       deleteService(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除服务成功'
@@ -240,10 +240,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }

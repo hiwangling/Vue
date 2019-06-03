@@ -211,10 +211,10 @@ export default {
     getList() {
       this.listLoading = true
       listGrave(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.garen_id = response.data.data.y_id
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.garen_id = res.data.data.y_id
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -250,8 +250,8 @@ export default {
       this.listQuery.q_id = ''
       this.dataForm.classify_id = ''
       get_areas(data)
-        .then(response => {
-          this.cemetery.areas = response.data
+        .then(res => {
+          this.cemetery.areas = res.data
         })
     },
     handleCreate() {
@@ -266,9 +266,9 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createGrave(this.dataForm)
-            .then(response => {
-              console.log(response.data)
-              this.list.unshift(response.data)
+            .then(res => {
+              console.log(res.data)
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.getList()
               this.$notify.success({
@@ -276,10 +276,10 @@ export default {
                 message: '添加墓穴成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -291,8 +291,8 @@ export default {
         pid: this.garen_id
       }
       get_areas(data)
-        .then(response => {
-          this.cemetery.areas = response.data
+        .then(res => {
+          this.cemetery.areas = res.data
         })
       this.dataForm = Object.assign({}, row)
       this.dialogStatus = 'update'
@@ -320,10 +320,10 @@ export default {
                 message: '更新墓穴成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response
+                message: res
               })
             })
         }
@@ -331,7 +331,7 @@ export default {
     },
     handleDelete(row) {
       deleteGrave(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除墓穴成功'
@@ -339,10 +339,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }

@@ -76,8 +76,8 @@ export default {
         cid: this.cems.id
       }
       getsevices(data)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.listLoading = false
         })
         .catch(() => {
@@ -105,7 +105,7 @@ export default {
     },
     handleDelete(row) {
       delservices(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除服务成功'
@@ -113,10 +113,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
@@ -127,17 +127,17 @@ export default {
         type: 'warning'
       }).then(() => {
         payservices(row)
-          .then(response => {
+          .then(res => {
             this.$notify.success({
               title: '成功',
               message: '付款服务成功'
             })
             this.getList()
           })
-          .catch(response => {
+          .catch(res => {
             this.$notify.error({
               title: '失败',
-              message: response.msg
+              message: res.msg
             })
           })
       }).catch(() => {

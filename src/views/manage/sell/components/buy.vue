@@ -141,8 +141,8 @@ export default {
         cid: this.cems.id
       }
       listbuy(data)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.listLoading = false
         })
         .catch(() => {
@@ -163,19 +163,19 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           addbuy(this.dataForm)
-            .then(response => {
-              response.data.sell_price = this.cems.sellprice
-              this.list.unshift(response.data)
+            .then(res => {
+              res.data.sell_price = this.cems.sellprice
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加购墓信息成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -206,11 +206,11 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           editbuy(this.dataForm)
-            .then((response) => {
+            .then((res) => {
               for (const v of this.list) {
-                if (v.id === response.data.id) {
+                if (v.id === res.data.id) {
                   const index = this.list.indexOf(v)
-                  this.list.splice(index, 1, response.data)
+                  this.list.splice(index, 1, res.data)
                   break
                 }
               }
@@ -220,10 +220,10 @@ export default {
                 message: '更新购墓信息成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -231,7 +231,7 @@ export default {
     },
     handleDelete(row) {
       deletebuy(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除购墓信息成功'
@@ -239,10 +239,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     },
@@ -256,17 +256,17 @@ export default {
           cid: this.cems.id
         }
         pay(data)
-          .then(response => {
+          .then(res => {
             this.$store.dispatch('cemetery/pay', this.cems.id)
             this.$notify.success({
               title: '成功',
               message: '付款成功'
             })
           })
-          .catch(response => {
+          .catch(res => {
             this.$notify.error({
               title: '失败',
-              message: response.msg
+              message: res.msg
             })
           })
       }).catch(() => {
@@ -295,8 +295,8 @@ export default {
         cid: this.cems.id
       }
       listlink(data)
-        .then(response => {
-          this.listlink = response.data
+        .then(res => {
+          this.listlink = res.data
         })
         .catch(() => {
           this.listlink = null

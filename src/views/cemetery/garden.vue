@@ -80,9 +80,9 @@ export default {
     getList() {
       this.listLoading = true
       listGarden(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -113,18 +113,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createGarden(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data)
+            .then(res => {
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加墓园成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -156,10 +156,10 @@ export default {
                 message: '更新墓园成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -167,7 +167,7 @@ export default {
     },
     handleDelete(row) {
       deleteGarden(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除墓园成功'
@@ -175,10 +175,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }

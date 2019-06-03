@@ -70,8 +70,8 @@ export default {
     getList() {
       this.listLoading = true
       listType(this.listQuery)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.listLoading = false
         })
         .catch(() => {
@@ -99,18 +99,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createType(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data)
+            .then(res => {
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加墓位类型成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -142,10 +142,10 @@ export default {
                 message: '更新墓位类型成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -153,7 +153,7 @@ export default {
     },
     handleDelete(row) {
       deleteType(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除墓位类型成功'
@@ -161,10 +161,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }

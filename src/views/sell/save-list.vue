@@ -19,21 +19,21 @@
       <el-table-column align="center" label="费用" prop="saveprice" width="100" />
       <el-table-column align="center" label="寄存状态" prop="save_status">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.save_status | statusFilter">
+          <el-tag :type="scope.row.save_status | OrStatus">
             {{ scope.row.save_status == 1 ? '寄存中' : '已取走' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="付款状态" prop="order_state">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.order_state | statusFilter">
+          <el-tag :type="scope.row.order_state | OrStatus">
             {{ scope.row.order_state == 1 ? '未付款' : '已付款' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="到期时间" prop="guoqi_status" width="120">
         <template v-if="scope.row.guoqi_days" slot-scope="scope">
-          <el-tag :type="scope.row.guoqi_status | statusFilter">
+          <el-tag :type="scope.row.guoqi_status | OrStatus">
             {{ scope.row.guoqi_days }}
           </el-tag>
         </template>
@@ -49,15 +49,6 @@ import Pagination from '@/components/Pagination'
 
 export default {
   name: 'VueSaveList',
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'danger',
-        0: 'success'
-      }
-      return statusMap[status]
-    }
-  },
   components: { Pagination },
   data() {
     return {
@@ -91,16 +82,16 @@ export default {
     getList() {
       this.listLoading = true
       listSave(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
+        .then(res => {
+          this.list = res.data.data
           // this.list.forEach((val, key) => {
           //   const data = { cid: val.cid }
           //   get_name(data)
-          //     .then(response => {
-          //       this.list[key].cid = response.data.name
+          //     .then(res => {
+          //       this.list[key].cid = res.data.name
           //     })
           // })
-          this.total = response.data.total
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {

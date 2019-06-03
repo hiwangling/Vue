@@ -30,15 +30,6 @@ import Pagination from '@/components/Pagination'
 
 export default {
   name: 'VueSaveList',
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'danger',
-        0: 'success'
-      }
-      return statusMap[status]
-    }
-  },
   components: { Pagination },
   data() {
     return {
@@ -64,9 +55,9 @@ export default {
     getList() {
       this.listLoading = true
       AllReserve(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
         })
         .catch(() => {

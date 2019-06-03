@@ -48,17 +48,17 @@ export default {
   created() {
     this.getList()
     get_gardens()
-      .then(response => {
-        this.gardens = response.data
+      .then(res => {
+        this.gardens = res.data
       })
   },
   methods: {
     getList() {
       this.listLoading = true
       listArea(this.listQuery)
-        .then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
+        .then(res => {
+          this.list = res.data.data
+          this.total = res.data.total
           this.listLoading = false
           this.list.forEach((v, k) => {
             v.image_url = process.env.VUE_APP_BASE + v.image_url

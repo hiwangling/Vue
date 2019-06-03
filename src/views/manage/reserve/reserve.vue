@@ -100,8 +100,8 @@ export default {
       this.listLoading = false
       const data = { cid: this.cems.id }
       listReserve(data)
-        .then(response => {
-          this.list = response.data
+        .then(res => {
+          this.list = res.data
           this.listLoading = false
         })
         .catch(() => {
@@ -130,18 +130,18 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createReserve(this.dataForm)
-            .then(response => {
-              this.list.unshift(response.data)
+            .then(res => {
+              this.list.unshift(res.data)
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
                 message: '添加预定信息成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response.msg
+                message: res.msg
               })
             })
         }
@@ -153,11 +153,11 @@ export default {
           delete this.dataForm['guoqi_days']
           delete this.dataForm['guoqi_status']
           updateReserve(this.dataForm)
-            .then((response) => {
+            .then((res) => {
               // for (const v of this.list) {
-              //   if (v.id === response.data.id) {
+              //   if (v.id === res.data.id) {
               //     const index = this.list.indexOf(v)
-              //     this.list.splice(index, 1, response.data)
+              //     this.list.splice(index, 1, res.data)
               //     break
               //   }
               // }
@@ -168,10 +168,10 @@ export default {
                 message: '更新预定信息成功'
               })
             })
-            .catch(response => {
+            .catch(res => {
               this.$notify.error({
                 title: '失败',
-                message: response
+                message: res
               })
             })
         }
@@ -187,7 +187,7 @@ export default {
     },
     handleDelete(row) {
       deleteReserve(row)
-        .then(response => {
+        .then(res => {
           this.$notify.success({
             title: '成功',
             message: '删除预定信息成功'
@@ -195,10 +195,10 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
-        .catch(response => {
+        .catch(res => {
           this.$notify.error({
             title: '失败',
-            message: response.msg
+            message: res.msg
           })
         })
     }
