@@ -91,7 +91,7 @@ export default {
       listStyle(this.listQuery)
         .then(res => {
           this.list = res.data.data
-          this.total = res.data.total
+          this.total = res.data.total || 0
           this.listLoading = false
         })
         .catch(() => {

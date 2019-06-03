@@ -91,7 +91,7 @@ export default {
           //       this.list[key].cid = res.data.name
           //     })
           // })
-          this.total = res.data.total
+          this.total = res.data.total || 0
           this.listLoading = false
         })
         .catch(() => {

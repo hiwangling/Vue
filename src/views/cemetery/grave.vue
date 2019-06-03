@@ -214,7 +214,7 @@ export default {
         .then(res => {
           this.list = res.data.data
           this.garen_id = res.data.data.y_id
-          this.total = res.data.total
+          this.total = res.data.total || 0
           this.listLoading = false
         })
         .catch(() => {

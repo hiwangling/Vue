@@ -58,7 +58,7 @@ export default {
       listArea(this.listQuery)
         .then(res => {
           this.list = res.data.data
-          this.total = res.data.total
+          this.total = res.data.total || 0
           this.listLoading = false
           this.list.forEach((v, k) => {
             v.image_url = process.env.VUE_APP_BASE + v.image_url
