@@ -12,6 +12,10 @@ const getters = {
   perms: state => state.user.perms,
   permission_routes: state => state.permission.routes,
   addRoutes: state => state.permission.addRoutes,
-  errorLogs: state => state.errorLog.logs
+  errorLogs: state => state.errorLog.logs,
+  cems: state => state.cemetery.cems,
+  order: state => state.cemetery.order,
+  payStatus: state => state.cemetery.pay
+
 }
 export default getters

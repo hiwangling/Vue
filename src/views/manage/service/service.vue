@@ -15,7 +15,7 @@
       <el-table-column align="center" width="80" label="服务总价" prop="sum_price" />
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.order_status | statusFilter">
+          <el-tag :type="scope.row.order_status | OrStatus">
             {{ scope.row.order_status == 1 ? '未付款' : '已付款' }}
           </el-tag>
         </template>
@@ -41,18 +41,10 @@
 <script>
 import ServiceSelect from './components/ServiceSelect'
 import { getsevices, delservices, payservices } from '@/api/buy-service'
-import { mapState } from 'vuex'
+import { vuexData } from '@/utils/mixin'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'danger',
-        0: 'success'
-      }
-      return statusMap[status]
-    }
-  },
   components: { ServiceSelect },
+  mixins: [vuexData],
   data() {
     return {
       index: 2,
@@ -68,12 +60,6 @@ export default {
         create: '创建服务'
       }
     }
-  },
-  computed: {
-    ...mapState('cemetery', {
-      cems: state => state.cems,
-      order: state => state.order
-    })
   },
   watch: {
     cems: {
@@ -130,7 +116,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },
@@ -151,7 +137,7 @@ export default {
           .catch(response => {
             this.$notify.error({
               title: '失败',
-              message: response.data.msg
+              message: response.msg
             })
           })
       }).catch(() => {

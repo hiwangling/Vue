@@ -11,7 +11,7 @@
       <el-table-column align="center" width="80" label="实收金额" prop="real_price" />
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template>
-          <el-tag :type="payStatus | statusFilter">
+          <el-tag :type="payStatus | OrStatus">
             {{ payStatus == 1 ? '未付款' : '已付款' }}
           </el-tag>
         </template>
@@ -86,17 +86,9 @@
 <script>
 import { addbuy, listbuy, editbuy, deletebuy, pay } from '@/api/buy'
 import { listlink } from '@/api/link'
-import { mapState } from 'vuex'
+import { vuexData } from '@/utils/mixin'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'danger',
-        0: 'success'
-      }
-      return statusMap[status]
-    }
-  },
+  mixins: [vuexData],
   data() {
     return {
       index: 1,
@@ -127,11 +119,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('cemetery', {
-      cems: state => state.cems,
-      order: state => state.order,
-      payStatus: state => state.pay
-    }),
     rule() {
       return !!this.dataForm.linkman_id
     }
@@ -188,7 +175,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -236,7 +223,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -255,7 +242,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },
@@ -279,7 +266,7 @@ export default {
           .catch(response => {
             this.$notify.error({
               title: '失败',
-              message: response.data.msg
+              message: response.msg
             })
           })
       }).catch(() => {

@@ -11,7 +11,7 @@
       <el-table-column align="center" label="到期时间" prop="ordainend" />
       <el-table-column align="center" label="预定状态" prop="guoqi_status" width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.guoqi_status | statusFilter">
+          <el-tag :type="scope.row.guoqi_status | OrStatus">
             {{ scope.row.guoqi_days }}
           </el-tag>
         </template>
@@ -58,17 +58,9 @@
 </template>
 <script>
 import { listReserve, createReserve, updateReserve, deleteReserve } from '@/api/reserve'
-import { mapState } from 'vuex'
+import { vuexData } from '@/utils/mixin'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'danger',
-        0: 'success'
-      }
-      return statusMap[status]
-    }
-  },
+  mixins: [vuexData],
   data() {
     return {
       index: 0,
@@ -93,12 +85,6 @@ export default {
         ordainend: [{ required: true, message: '请选择日期', trigger: 'change' }]
       }
     }
-  },
-  computed: {
-    ...mapState('cemetery', {
-      cems: state => state.cems,
-      order: state => state.order
-    })
   },
   watch: {
     cems: {
@@ -155,7 +141,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -212,7 +198,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     }

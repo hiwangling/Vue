@@ -201,7 +201,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },
@@ -238,7 +238,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -278,7 +278,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -297,7 +297,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },

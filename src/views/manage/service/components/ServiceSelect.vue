@@ -66,7 +66,9 @@
 import { listService } from '@/api/service'
 import { getEditService, addservices, editservices } from '@/api/buy-service'
 import { listlink } from '@/api/link'
+import { vuexData } from '@/utils/mixin'
 export default {
+  mixins: [vuexData],
   data() {
     return {
       bury: '',
@@ -85,11 +87,6 @@ export default {
       rules: {
         linkman_id: [{ required: true, message: '联系人不能为空', trigger: 'change' }]
       }
-    }
-  },
-  computed: {
-    cems() {
-      return this.$store.state.cemetery.cems
     }
   },
   watch: {
@@ -189,7 +186,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -216,7 +213,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }

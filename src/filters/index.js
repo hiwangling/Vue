@@ -105,3 +105,10 @@ export function userstatusFilter(status) {
   const statusMap = { 1: '待销售', 2: '已预定', 3: '已销售', 4: '已安葬', 5: '迁走' }
   return statusMap[status]
 }
+export function OrStatus(status) {
+  const statusMap = {
+    1: 'danger',
+    0: 'success'
+  }
+  return statusMap[status]
+}

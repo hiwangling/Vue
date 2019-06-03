@@ -44,8 +44,9 @@
 </template>
 <script>
 import { listlink, createlink, updatelink, deletelink } from '@/api/link'
-import { mapState } from 'vuex'
+import { vuexData } from '@/utils/mixin'
 export default {
+  mixins: [vuexData],
   data() {
     return {
       index: 1,
@@ -69,12 +70,6 @@ export default {
         link_name: [{ required: true, message: '联系人姓名不能为空', trigger: 'blur' }]
       }
     }
-  },
-  computed: {
-    ...mapState('cemetery', {
-      cems: state => state.cems,
-      order: state => state.order
-    })
   },
   watch: {
     cems: {
@@ -134,7 +129,7 @@ export default {
             .catch(response => {
               this.$notify.error({
                 title: '失败',
-                message: response.data.msg
+                message: response.msg
               })
             })
         }
@@ -188,7 +183,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     }

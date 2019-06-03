@@ -123,9 +123,10 @@
 </template>
 <script>
 import { listType } from '@/api/type'
-import { mapState } from 'vuex'
+import { vuexData } from '@/utils/mixin'
 import { adddead, listdead, deletedead, updatedead } from '@/api/dead'
 export default {
+  mixins: [vuexData],
   data() {
     return {
       index: 1,
@@ -154,22 +155,6 @@ export default {
         // vcname: [{ required: true, message: '墓主不能为空', trigger: 'blur' }]
       }
     }
-  },
-  computed: {
-    ...mapState('cemetery', {
-      cems: state => state.cems,
-      order: state => state.order,
-      payStatus: state => state.pay
-    })
-    // typeStatus() {
-    //   let obj = null
-    //   if (this.cemeteryType) {
-    //     obj = this.cemeteryType.find((item) => {
-    //       return item.hrm === this.type_id
-    //     })
-    //   }
-    //   return obj
-    // }
   },
   watch: {
     cems: {
@@ -230,7 +215,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },
@@ -247,7 +232,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },
@@ -278,7 +263,7 @@ export default {
         .catch(response => {
           this.$notify.error({
             title: '失败',
-            message: response.data.msg
+            message: response.msg
           })
         })
     },

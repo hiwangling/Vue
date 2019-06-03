@@ -31,6 +31,7 @@
 <script>
 import { listGrave } from '@/api/grave'
 import { get_name, get_num } from '@/api/cemetery'
+import { vuexData } from '@/utils/mixin'
 import Pagination from '@/components/Pagination'
 import Service from './service/service'
 import Sell from './sell/sell'
@@ -40,6 +41,7 @@ import monumental from './monumen/monumen'
 export default {
   name: 'VueLists',
   components: { Pagination, Service, Sell, Reserve, Save, monumental },
+  mixins: [vuexData],
   data() {
     return {
       list: null,
@@ -91,8 +93,8 @@ export default {
         })
     },
     CreateCemetery(item) {
-      this.$store.dispatch('cemetery/pay', item.id)
-      this.$store.dispatch('cemetery/addCemetery', item)
+      this.pay(item.id)
+      this.addCemetery(item)
       const data = { cid: item.id }
       get_name(data)
         .then(response => {
@@ -101,7 +103,7 @@ export default {
       this.dialogFormVisible = true
     },
     handleClick(tab) {
-      this.$store.dispatch('cemetery/changeOrders', tab.index)
+      this.changeOrders(tab.index)
     }
   }
 }
