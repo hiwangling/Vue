@@ -28,6 +28,15 @@ const memberRouter = {
         noCache: true,
         perms: ['POST /api/v1/manager/list', 'POST /api/v1/manager/add', 'POST /api/v1/manager/edit']
       }
+    },
+    {
+      path: 'password',
+      name: 'ChangePassword',
+      component: () => import('@/views/member/password'),
+      meta: {
+        title: '修改密码',
+        noCache: true
+      }
     }
   ]
 }

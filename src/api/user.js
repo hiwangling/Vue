@@ -23,3 +23,10 @@ export function logout() {
   })
 }
 
+export function changePassword(data) {
+  return request({
+    url: '/manager/edit_pwd',
+    method: 'post',
+    data
+  })
+}
