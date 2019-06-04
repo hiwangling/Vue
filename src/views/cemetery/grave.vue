@@ -20,6 +20,7 @@
       </el-select>
       <el-button v-permission="['GET /api/v1/cemetery/list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button v-permission="['POST /api/v1/cemetery/add']" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+      <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
     </div>
 
     <!-- 查询结果 -->
@@ -133,6 +134,7 @@
 <script>
 import { listGrave, createGrave, updateGrave, deleteGrave } from '@/api/grave'
 import { get_gardens, get_areas, get_styles, get_types, get_status } from '@/api/cemetery'
+import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 export default {
   name: 'VueArea',
@@ -148,6 +150,7 @@ export default {
         types: null
       },
       listLoading: true,
+      downloadLoading: false,
       garen_id: '',
       form_garen_id: '',
       listQuery: {
@@ -345,6 +348,29 @@ export default {
             message: res.msg
           })
         })
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['cname', 'y_name', 'usestatus']
+        const filterVal = ['cname', 'y_name', 'usestatus']
+        const data = this.formatJson(filterVal, this.list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: 'table-list'
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }

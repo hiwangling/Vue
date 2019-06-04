@@ -131,7 +131,8 @@ export default {
         if (valid) {
           createReserve(this.dataForm)
             .then(res => {
-              this.list.unshift(res.data)
+              // this.list.unshift(res.data)
+              this.getList()
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',

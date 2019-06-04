@@ -23,3 +23,11 @@ export function ExecuteService(data) {
     data
   })
 }
+
+export function CatService(query) {
+  return request({
+    url: '/servicebill/get_one',
+    method: 'get',
+    params: query
+  })
+}

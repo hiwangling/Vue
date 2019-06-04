@@ -50,7 +50,7 @@
         <el-table-column align="center" label="操作" class-name="small-padding fixed-width" width="130">
           <template slot-scope="scope">
             <el-button v-if="scope.row.resutlstatus === 1" type="danger" size="mini" @click="handleCreate(scope.row.id)">执行</el-button>
-            <el-button v-else type="primary" size="mini">查看</el-button>
+            <el-button v-else type="primary" size="mini" @click="handleCat(scope.row.id)">查看</el-button>
           </template>
 
         </el-table-column>
@@ -60,15 +60,19 @@
       </div>
     </el-dialog>
 
-    <el-dialog class="dialog" title="服务执行" :visible.sync="dialogFormVisible_" top="5vh">
+    <el-dialog class="dialog" :title="textMap[dialogStatus2]" :visible.sync="dialogFormVisible_" top="5vh">
       <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="margin-left:50px;">
         <el-form-item label="完成时间" prop="execdate">
           <el-date-picker
             v-model="dataForm.execdate"
             type="date"
+            :disabled="flag ? true : false"
             value-format="yyyy-MM-dd"
             placeholder="选择日期"
           />
+        </el-form-item>
+        <el-form-item v-if="flag" label="执行人">
+          <el-input v-model="operater_name" :disabled="flag ? true : false" />
         </el-form-item>
         <el-form-item label="上传图片">
           <span style="color:red">只能上传image/jpeg文件，且不超过2M</span>
@@ -76,6 +80,7 @@
             class="avatar-uploader"
             :headers="headers"
             :action="uploadPath"
+            :disabled="flag ? true : false"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -85,18 +90,18 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="服务说明" prop="execnote">
-          <el-input v-model="dataForm.execnote" type="textarea" style="width: 250px;" />
+          <el-input v-model="dataForm.execnote" :disabled="flag ? true : false" type="textarea" style="width: 250px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible_ = false">取消</el-button>
-        <el-button type="primary" @click="SendData">确定</el-button>
+        <el-button v-if="flag == false" type="primary" @click="SendData">确定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import { AllCemetery, AllCemeteryCid, ExecuteService } from '@/api/to-service'
+import { AllCemetery, AllCemeteryCid, ExecuteService, CatService } from '@/api/to-service'
 // import { get_name } from '@/api/cemetery'
 import { uploadPath } from '@/api/upload'
 import { getToken } from '@/utils/auth'
@@ -110,11 +115,18 @@ export default {
       uploadPath,
       list: null,
       list_service: null,
+      operater_name: '',
       total: 0,
       image_url: '',
+      flag: false,
       listLoading: true,
       listLoading_: true,
       dialogStatus: '',
+      dialogStatus2: '',
+      textMap: {
+        update: '查看服务',
+        create: '服务执行'
+      },
       listQuery: {
         page: 1,
         limit: 20,
@@ -182,7 +194,22 @@ export default {
           this.listLoading_ = false
         })
     },
+    handleCat(id) {
+      this.flag = true
+      this.dialogStatus2 = 'update'
+      const data = { id: id }
+      CatService(data)
+        .then(res => {
+          this.dialogFormVisible_ = true
+          this.image_url = res.data.image_url !== '' ? process.env.VUE_APP_BASE + res.data.image_url : ''
+          this.dataForm.execdate = res.data.execdate
+          this.operater_name = res.data.operater_name
+          this.dataForm.execnote = res.data.execnote
+        })
+    },
     handleCreate(id) {
+      this.flag = false
+      this.dialogStatus2 = 'create'
       this.dataForm.execdate = ''
       this.dataForm.execnote = ''
       this.dialogFormVisible_ = true

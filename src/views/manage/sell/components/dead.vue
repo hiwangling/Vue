@@ -17,7 +17,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
+    <el-dialog id="dead" class="dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" append-to-body>
       <el-form v-if="list ? list.length>0 : true" ref="dataFormEdit" :inline="true" :rules="rules" status-icon label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
         <el-form-item label="墓主">
           <el-input v-model="dataFormEdit.vcname" />
@@ -314,4 +314,9 @@ export default {
   }
 }
 </script>
+<style>
+#dead .el-dialog{
+  width: 900px;
+}
+</style>
 

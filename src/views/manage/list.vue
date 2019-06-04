@@ -108,4 +108,9 @@ export default {
   }
 }
 </script>
+<style>
+#cemetery .el-dialog{
+  width: 900px;
+}
+</style>
 
