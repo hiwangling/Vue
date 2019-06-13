@@ -133,6 +133,7 @@ export default {
             .then(res => {
               // this.list.unshift(res.data)
               this.getList()
+              this.$emit('v')
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
@@ -195,6 +196,7 @@ export default {
           })
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
+          this.$emit('v')
         })
         .catch(res => {
           this.$notify.error({
