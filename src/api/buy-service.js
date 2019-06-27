@@ -47,4 +47,11 @@ export function getEditService(query) {
     params: query
   })
 }
+export function getServiceOne(query) {
+  return request({
+    url: '/service_info/get_serviceinfo_all',
+    method: 'get',
+    params: query
+  })
+}
 

@@ -3,7 +3,12 @@
     <div>
       <div class="filter-container" style="padding-bottom:0">
         <el-form ref="dataForm" :rules="rules" :inline="true" :model="dataForm" status-icon label-position="left" label-width="80px">
-          <el-form-item label="购买人" prop="linkman_id">
+          <el-form-item label="使用人">
+            <el-checkbox-group v-model="dataForm.buryarr">
+              <el-checkbox v-for="(val,item,index) in dead" :key="index" :label="val" />
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="付款人" prop="linkman_id">
             <el-select v-model="dataForm.linkman_id" clearable placeholder="请选择" style="width:140px" size="mini">
               <el-option
                 v-for="item in listlink"
@@ -12,22 +17,19 @@
                 :value="item.id"
               />
             </el-select>
+            <!-- <el-input v-model="dataForm.linkman_id" placeholder="请输入内容" /> -->
           </el-form-item>
           <el-form-item label="服务时间">
             <el-date-picker
-              v-model="dataForm.servicedate"
+              v-model="dataForm.service_time"
               style="width:140px!important"
               size="mini"
               type="date"
+              value-format="yyyy-MM-dd"
               placeholder="选择日期"
             />
           </el-form-item>
-          <el-form-item label="墓主">
-            <el-checkbox-group v-model="dataForm.bury">
-              <el-checkbox label="墓主1" />
-              <el-checkbox label="墓主2" />
-            </el-checkbox-group>
-          </el-form-item>
+
         </el-form>
       </div>
       <div class="ele" />
@@ -82,29 +84,28 @@
     </div>
   </el-dialog>
 </template>
-
 <script>
-// import { listService } from '@/api/service'
 import { getEditService, addservices, editservices, getServiceOne } from '@/api/buy-service'
-import { listlink } from '@/api/link'
-import { vuexData } from '@/utils/mixin'
+import { listdead } from '@/api/dead'
+import { page, vuexData } from '@/utils/mixin'
 export default {
-  mixins: [vuexData],
+  mixins: [page, vuexData],
   data() {
     return {
       bury: '',
-      listlink: '',
       order_detail_ids: null,
-      sum_price: '',
       id: '',
       dataForm: {
+        cid: '',
+        services: null,
         linkman_id: '',
-        servicedate: '',
-        bury: ['墓主1']
+        service_time: '',
+        sum_price: '',
+        buryarr: []
       },
-
       list: null,
       sell: null,
+      dead: [],
       listLoading: true,
       multipleSelection: [],
       dialogStatus: '',
@@ -127,7 +128,7 @@ export default {
             sum_price = sum_price + parseInt(v.sellprice)
           })
         }
-        this.sum_price = sum_price
+        this.dataForm.sum_price = sum_price
       },
       immediate: true
     }
@@ -138,8 +139,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      const parm = { service_type: 2 }
-      getServiceOne(parm)
+      // const parm = { service_type: 2 }
+      getServiceOne()
         .then(res => {
           this.list = res.data
           this.listLoading = false
@@ -177,15 +178,32 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-      this.findlink()
+      this.link()
+      this.deadlist()
+    },
+    deadlist() {
+      this.getdead()
+    },
+    getdead() {
+      const data = { cid: this.cems.id }
+      this.dead = []
+      listdead(data)
+        .then(res => {
+          res.data.forEach((v, k) => {
+            this.dead.push(v.vcname)
+          })
+        })
     },
     editservice(val) {
+      // this.dead = val
+      this.getdead()
       this.id = val
       const data = { id: val }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       getEditService(data)
         .then(res => {
+          // console.log(res.data)
           this.order_detail_ids = res.data.order_detail_ids
           this.dataForm.linkman_id = res.data.linkman_id
           const service = res.data.services
@@ -196,18 +214,14 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-      this.findlink()
+      this.link()
     },
     sendData() {
-      const data = {
-        cid: this.cems.id,
-        services: this.sell,
-        sum_price: this.sum_price,
-        linkman_id: this.dataForm.linkman_id
-      }
+      this.dataForm.cid = this.cems.id
+      this.dataForm.services = this.sell
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          addservices(data)
+          addservices(this.dataForm)
             .then(res => {
               this.$notify.success({
                 title: '成功',
@@ -226,21 +240,19 @@ export default {
       })
     },
     editData() {
-      const data = {
-        id: this.id,
-        services: this.sell,
-        order_detail_ids: this.order_detail_ids,
-        sum_price: this.sum_price,
-        linkman_id: this.dataForm.linkman_id
-      }
+      this.dataForm.services = this.sell
+      this.dataForm.cid = this.cems.id
+      this.dataForm.id = this.id
+      this.dataForm.order_detail_ids = this.order_detail_ids
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          editservices(data)
+          editservices(this.dataForm)
             .then(res => {
               this.$notify.success({
                 title: '成功',
                 message: '编辑服务成功'
               })
+              this.dialogFormVisible = false
               this.CloseDialog()
             })
             .catch(res => {
@@ -260,16 +272,6 @@ export default {
     },
     tableRow({ row, rowIndex }) {
       return 'rows'
-    },
-    findlink() {
-      const data = { cid: this.cems.id }
-      listlink(data)
-        .then(res => {
-          this.listlink = res.data
-        })
-        .catch(() => {
-          this.listlink = null
-        })
     }
   }
 }

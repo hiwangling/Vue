@@ -1,17 +1,16 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="listQuery.type_name" clearable class="filter-item" style="width: 200px;" placeholder="请输入墓名或者墓号" />
-      <el-button class="filter-item" type="primary" icon="el-icon-search">查找</el-button>
+    <div v-show="!filter" class="filter-container">
+      <el-input v-model="listQuery.keyword" clearable class="filter-item" style="width: 200px;" placeholder="请输入墓名或者墓号" />
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilters">查找</el-button>
     </div>
-    <div class="manage-tag">
+    <div v-show="!filter" class="manage-tag">
       <el-tag v-for="(value,item,idx) in num" :key="idx" :class="item | getNum" style="margin-left:5px">{{ item | getNumtxt }}({{ value }})</el-tag>
     </div>
-    <el-row type="flex" class="row-bg">
+    <el-row :gutter="20">
       <el-col v-for="(item,value) in list" :key="value" :span="2" :class="item.usestatus | getlist">
         <div style="height:100%;" @click="CreateCemetery(item)">
-          <p>墓号：{{ item.vno }}</p>
-          <p>墓型：{{ item.cemetery_type.type_name }}</p>
+          <p>{{ item.cname }}</p>
         </div>
       </el-col>
     </el-row>
@@ -30,12 +29,14 @@ import { vuexData } from '@/utils/mixin'
 import Pagination from '@/components/Pagination'
 import Service from './service/service'
 import Sell from './sell/sell'
-import Save from './save/save'
 import Reserve from './reserve/reserve'
-import monument from './monumen/monumen'
+import lamp from './lamp/lamp'
+import tree from './tree/tree'
+// import monument from './monumen/monumen'
+
 export default {
   name: 'VueLists',
-  components: { Pagination, Service, Sell, Reserve, Save, monument },
+  components: { Pagination, Service, Sell, Reserve, lamp, tree },
   mixins: [vuexData],
   data() {
     return {
@@ -43,6 +44,7 @@ export default {
       num: null,
       total: 0,
       cid: '',
+      filter: false,
       activeName: 'reserve',
       listLoading: true,
       listQuery: {
@@ -56,9 +58,9 @@ export default {
       tab: [
         { label: '预定', name: 'reserve' },
         { label: '购墓', name: 'sell' },
-        { label: '殡葬服务', name: 'service' },
-        { label: '寄存', name: 'save' },
-        { label: '碑文', name: 'monument' }
+        { label: '服务', name: 'service' },
+        { label: '点灯', name: 'lamp' },
+        { label: '常青树', name: 'tree' }
       ],
       dialogFormVisible: false,
       dialogStatus: '',
@@ -106,6 +108,17 @@ export default {
     },
     handleClick(tab) {
       this.changeOrders(tab.index)
+    },
+    handleFilters(filter) {
+      this.listQuery.page = 1
+      if (filter.flag) {
+        this.listQuery.q_id = filter.q_id
+        this.listQuery.keyword = filter.keyword
+        this.filter = filter.flag
+      } else {
+        this.listQuery.q_id = this.$route.params.id
+      }
+      this.getList()
     },
     v() {
       this.getList()

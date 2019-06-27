@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div style="margin:0 0 10px 0">
-      <el-button v-if="list ? list.length < 1 : ''" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加预定信息</el-button>
-      <el-button v-else type="info" plain disabled>墓穴已预定</el-button>
+      <el-button v-if="currentStatus === 1 && list ? list.length < 1 : '' " class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加预定信息</el-button>
+      <el-button v-else type="info" plain disabled>墓穴已锁定</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="预定人" prop="buyer_name" />
@@ -58,6 +58,7 @@
 </template>
 <script>
 import { listReserve, createReserve, updateReserve, deleteReserve } from '@/api/reserve'
+import { get_name } from '@/api/cemetery'
 import { vuexData } from '@/utils/mixin'
 export default {
   mixins: [vuexData],
@@ -66,6 +67,7 @@ export default {
       index: 0,
       list: null,
       listLoading: true,
+      currentStatus: Number,
       dialogStatus: '',
       dataForm: {
         cid: '',
@@ -74,11 +76,11 @@ export default {
         ordainend: '',
         phone: ''
       },
-      dialogFormVisible: false,
       textMap: {
         update: '编辑',
         create: '创建'
       },
+      dialogFormVisible: false,
       rules: {
         buyer_name: [{ required: true, message: '预定人不能为空', trigger: 'blur' }],
         ordainbegin: [{ required: true, message: '请选择日期', trigger: 'change' }],
@@ -108,6 +110,7 @@ export default {
           this.list = []
           this.listLoading = false
         })
+      this.getStatus()
     },
     resetForm() {
       this.dataForm = {
@@ -117,6 +120,13 @@ export default {
         ordainend: '',
         phone: ''
       }
+    },
+    getStatus() {
+      const data = { cid: this.cems.id }
+      get_name(data)
+        .then(res => {
+          this.currentStatus = Number(res.data.usestatus)
+        })
     },
     handleCreate() {
       this.resetForm()
@@ -197,6 +207,7 @@ export default {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
           this.$emit('v')
+          this.getStatus()
         })
         .catch(res => {
           this.$notify.error({

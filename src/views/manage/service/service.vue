@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div style="margin:0 0 10px 0">
-      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加服务信息</el-button>
+      <el-button v-if="currentStatus != 1" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加服务信息</el-button>
+      <el-button v-else type="info" plain disabled>服务已锁定</el-button>
+      <el-button v-if="status" class="filter-item" type="primary" icon="el-icon-edit" @click="handleMonumen">刻碑</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" width="110" label="订单号" prop="order_no" />
@@ -13,6 +15,8 @@
       </el-table-column>
       <el-table-column align="center" label="服务项目" prop="sell_title" show-overflow-tooltip />
       <el-table-column align="center" width="80" label="服务总价" prop="sum_price" />
+      <!-- <el-table-column align="center" label="墓主" prop="buryname" /> -->
+      <!-- <el-table-column align="center" label="服务时间" prop="service_time" /> -->
       <el-table-column prop="order_status" label="付款状态" align="center" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.order_status | or_status">
@@ -37,24 +41,32 @@
 <script>
 import ServiceSelect from './components/ServiceSelect'
 import { getsevices, delservices, payservices } from '@/api/buy-service'
-import { vuexData } from '@/utils/mixin'
+import { vuexData, page } from '@/utils/mixin'
 export default {
   components: { ServiceSelect },
-  mixins: [vuexData],
+  mixins: [vuexData, page],
   data() {
     return {
       index: 2,
       list: null,
+      status: false,
       linkman_id: '',
       listlink: '',
       linkdata: null,
+      dialogFormVisible: false,
       listLoading: false
     }
   },
   watch: {
+    order(val) {
+      if (val === this.index) {
+        this.getStatus()
+      }
+    },
     cems: {
       handler(val) {
         this.getList()
+        // this.getStatus()
       },
       immediate: true
     }
@@ -83,6 +95,7 @@ export default {
     },
     CloseDialog(val) {
       this.getList()
+      this.dialogFormVisible = false
     },
     handleDelete(row) {
       delservices(row)
@@ -93,6 +106,7 @@ export default {
           })
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
+          this.getStatus()
         })
         .catch(res => {
           this.$notify.error({
@@ -105,7 +119,8 @@ export default {
       this.$confirm('付款此订单后服务信息将无法修改和删除, 是否继续?', '付款操作', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
+        customClass: 'confirmTop'
       }).then(() => {
         payservices(row)
           .then(res => {
@@ -127,19 +142,20 @@ export default {
           message: '已取消'
         })
       })
-    },
-    Creatlink(val) {
-    //   let obj = {}
-    //   obj = this.listlink.find((item) => {
-    //     return item.id === val
-    //   })
-    //   this.linkdata = obj
     }
-
+    // handleMonumen() {
+    //   this.dialogFormVisible = true
+    //   this.$refs.get.setBorder()
+    // },
+    // createDate() {
+    //   this.$refs.get.getData()
+    // }
   }
 }
 </script>
-<style scoped>
-
+<style >
+#monumen .el-dialog{
+  width: 900px;
+}
 </style>
 
