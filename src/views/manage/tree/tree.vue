@@ -4,17 +4,22 @@
       <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加常青树服务</el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
-      <el-table-column align="center" label="订单号" prop="order_no" />
+      <el-table-column align="center" label="订单号" prop="number" />
       <!-- <el-table-column align="center" label="寄存点" prop="address" /> -->
-      <el-table-column align="center" label="购买人" prop="buyer_name" width="100" />
-      <el-table-column align="center" label="电话" prop="phone" width="120" />
-      <el-table-column align="center" label="点灯时间" prop="lamp_nd" width="150">
+      <el-table-column align="center" label="购买人" prop="buyer_name" />
+      <el-table-column align="center" label="电话" prop="phone" />
+      <el-table-column align="center" label="开始时间" prop="star" />
+      <el-table-column align="center" label="结束时间" prop="end" />
+      <el-table-column align="center" label="数量" prop="amount" />
+      <el-table-column align="center" label="总价" prop="total" />
+      <!--
+      <el-table-column align="center" label="开始时间" prop="lamp_nd" width="150">
         <template slot-scope="scope">
           <span style="font-size: 18px;color:red">
             {{ scope.row.lamp_nd }}
           </span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="付款状态" prop="order_status">
         <template slot-scope="scope">
           <el-tag :type="scope.row.order_status | or_status">
@@ -26,7 +31,7 @@
         <template slot-scope="scope">
           <template v-if="scope.row.order_status == 1">
             <el-button type="warning" size="mini" @click="handlePay(scope.row)">付款</el-button>
-            <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button> -->
+            <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
             <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
           </template>
           <template v-else>
@@ -43,23 +48,15 @@
         <el-form-item label="使用人">
           <el-input v-model="dead" :disabled="true" />
         </el-form-item>
-        <!-- <el-form-item label="类型">
-          <el-radio v-model="dataForm.type" label="1">单盆</el-radio>
-          <el-radio v-model="dataForm.type" label="2">多盆</el-radio>
-        </el-form-item> -->
-
-        <el-form-item label="付款人" prop="buyname">
-          <el-input v-model="dataForm.buyname" />
+        <el-form-item label="付款人" prop="buyer_name ">
+          <el-input v-model="dataForm.buyer_name" />
         </el-form-item>
         <el-form-item label="联系电话" prop="phone">
           <el-input v-model="dataForm.phone" />
         </el-form-item>
-        <!-- <el-form-item label="身份证" prop="sfz">
-          <el-input v-model="dataForm.card_no" />
-        </el-form-item> -->
         <el-form-item label="开始时间">
           <el-date-picker
-            v-model="dataForm.buydate"
+            v-model="dataForm.star"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择年份"
@@ -67,20 +64,20 @@
         </el-form-item>
         <el-form-item label="结束时间">
           <el-date-picker
-            v-model="dataForm.buydate1"
+            v-model="dataForm.end"
             type="date"
             placeholder="选择年份"
             @change="choose"
           />
         </el-form-item>
         <el-form-item label="盆数">
-          <el-input v-model="dataForm.quantity" @blur="quantity" />
+          <el-input v-model="dataForm.amount" @blur="quantity" />
         </el-form-item>
         <el-form-item label="价格">
           <el-input v-model="dataForm.real_price" />
         </el-form-item>
         <el-form-item label="总价">
-          <span class="tag" style="color:red;display: inline-block;width: 150px;">{{ dataForm.all_price }} 元</span>
+          <span class="tag" style="color:red;display: inline-block;width: 150px;">{{ dataForm.total }} 元</span>
         </el-form-item>
         <!-- <el-form-item label="*注:">
           <div style="color:red;font-size:13px"> 选择2019年代表2019年腊月二十六——2020年正月十五点灯</div>
@@ -96,8 +93,10 @@
 </template>
 <script>
 // import { lamplist, lampadd, lampdelete, lamppay } from '@/api/lamp'
+import { treeCreate, treelist, treedel, treeedit } from '@/api/tree'
 import { vuexData } from '@/utils/mixin'
 import { listdead } from '@/api/dead'
+import { parseTime } from '@/utils'
 export default {
   mixins: [vuexData],
   data() {
@@ -108,15 +107,13 @@ export default {
       dialogStatus: '',
       dataForm: {
         cid: '',
-        buyname: '',
+        buyer_name: '',
         phone: '',
         real_price: '',
-        buydate: '',
-        buydate1: '',
-        all_price: '',
-        card_no: '',
-        quantity: ''
-
+        star: '',
+        end: '',
+        total: '',
+        amount: ''
       },
       dialogFormVisible: false,
       rules: {
@@ -135,16 +132,16 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      // const data = { cid: this.cems.id }
-      // lamplist(data)
-      //   .then(res => {
-      //     this.list = res.data
-      //     this.listLoading = false
-      //   })
-      //   .catch(() => {
-      //     this.list = []
-      //     this.listLoading = false
-      //   })
+      const data = { cid: this.cems.id }
+      treelist(data)
+        .then(res => {
+          this.list = res.data
+          this.listLoading = false
+        })
+        .catch(() => {
+          this.list = []
+          this.listLoading = false
+        })
     },
     handleCreate() {
       this.resetForm()
@@ -158,40 +155,42 @@ export default {
     resetForm() {
       this.dataForm = {
         cid: this.cems.id,
-        buyname: '',
+        buyer_name: '',
         phone: '',
-        buydate: new Date(),
-        buydate1: '',
         real_price: 80,
-        card_no: '',
-        all_price: 80,
-        quantity: 1
+        star: new Date(),
+        end: '',
+        total: 80,
+        amount: 1
       }
     },
     createData() {
+      this.dataForm.star = parseTime(this.dataForm.star, '{y}-{m}-{d}')
+      this.dataForm.end = parseTime(this.dataForm.end, '{y}-{m}-{d}')
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          // lampadd(this.dataForm)
-          //   .then(res => {
-          //     // this.list.unshift(res.data)
-          //     this.getList()
-          //     this.dialogFormVisible = false
-          //     this.$notify.success({
-          //       title: '成功',
-          //       message: '添加成功'
-          //     })
-          //   })
-          //   .catch(res => {
-          //     this.$notify.error({
-          //       title: '失败',
-          //       message: res.msg
-          //     })
-          //   })
+          treeCreate(this.dataForm)
+            .then(res => {
+              // this.list.unshift(res.data)
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify.success({
+                title: '成功',
+                message: '添加成功'
+              })
+            })
+            .catch(res => {
+              this.$notify.error({
+                title: '失败',
+                message: res.msg
+              })
+            })
         }
       })
     },
     handleUpdate(row) {
       this.dataForm = Object.assign({}, row)
+      this.dataForm.real_price = 80
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -218,31 +217,32 @@ export default {
       this.sum()
     },
     sum() {
-      const v = this.dataForm.buydate.getFullYear()
-      const e = this.dataForm.buydate1.getFullYear()
+      console.log(this.dataForm.star)
+      const v = this.dataForm.star.getFullYear()
+      const e = this.dataForm.end.getFullYear()
       const m = e - v <= 0 ? 1 : e - v
-      this.dataForm.all_price = m * this.dataForm.quantity * this.dataForm.real_price
+      this.dataForm.total = m * this.dataForm.amount * this.dataForm.real_price
     },
     updateData() {
-      // this.$refs['dataForm'].validate(valid => {
-      //   if (valid) {
-      //     updateSave(this.dataForm)
-      //       .then((res) => {
-      //         this.getList()
-      //         this.dialogFormVisible = false
-      //         this.$notify.success({
-      //           title: '成功',
-      //           message: '更新寄存信息成功'
-      //         })
-      //       })
-      //       .catch(res => {
-      //         this.$notify.error({
-      //           title: '失败',
-      //           message: res
-      //         })
-      //       })
-      //   }
-      // })
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          treeedit(this.dataForm)
+            .then((res) => {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify.success({
+                title: '成功',
+                message: '更新寄存信息成功'
+              })
+            })
+            .catch(res => {
+              this.$notify.error({
+                title: '失败',
+                message: res
+              })
+            })
+        }
+      })
     },
     handlePay(row) {
       // this.$confirm('付款此订单后将无法修改和删除, 是否继续?', '付款操作', {
@@ -273,21 +273,21 @@ export default {
       // })
     },
     handleDelete(row) {
-      // lampdelete(row)
-      //   .then(res => {
-      //     this.$notify.success({
-      //       title: '成功',
-      //       message: '删除成功'
-      //     })
-      //     const index = this.list.indexOf(row)
-      //     this.list.splice(index, 1)
-      //   })
-      //   .catch(res => {
-      //     this.$notify.error({
-      //       title: '失败',
-      //       message: res.msg
-      //     })
-      //   })
+      treedel(row)
+        .then(res => {
+          this.$notify.success({
+            title: '成功',
+            message: '删除成功'
+          })
+          const index = this.list.indexOf(row)
+          this.list.splice(index, 1)
+        })
+        .catch(res => {
+          this.$notify.error({
+            title: '失败',
+            message: res.msg
+          })
+        })
     }
   }
 }
