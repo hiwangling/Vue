@@ -68,32 +68,17 @@ export function uppercaseFirst(string) {
 }
 
 export function getNum(status) {
-  const statusMap = {
-    1: 'sell',
-    2: 'reserve',
-    3: 'sold',
-    4: 'bury'
-  }
+  const statusMap = { 1: 'sell', 2: 'reserve', 3: 'sold', 4: 'bury', 5: 'except' }
   return statusMap[status]
 }
 
 export function getlist(status) {
-  const statusMap = {
-    1: 'sell bg-gaid',
-    2: 'reserve bg-gaid',
-    3: 'sold bg-gaid',
-    4: 'bury bg-gaid'
-  }
+  const statusMap = { 1: 'sell bg-gaid', 2: 'reserve bg-gaid', 3: 'sold bg-gaid', 4: 'bury bg-gaid', 5: 'except bg-gaid' }
   return statusMap[status]
 }
 
 export function getNumtxt(status) {
-  const statusMap = {
-    1: '待售',
-    2: '预定',
-    3: '已售',
-    4: '安葬'
-  }
+  const statusMap = { 1: '待售', 2: '预定', 3: '已售', 4: '安葬', 5: '异常' }
   return statusMap[status]
 }
 
@@ -102,13 +87,14 @@ export function statusFilter(status) {
   return statusMap[status]
 }
 export function userstatusFilter(status) {
-  const statusMap = { 1: '待销售', 2: '已预定', 3: '已销售', 4: '已安葬', 5: '迁走' }
+  const statusMap = { 1: '待销售', 2: '已预定', 3: '已销售', 4: '已安葬', 5: '异常' }
   return statusMap[status]
 }
 export function or_status(status) {
-  const statusMap = {
-    1: 'danger',
-    0: 'success'
-  }
+  const statusMap = { 1: 'danger', 0: 'success' }
+  return statusMap[status]
+}
+export function bury_status(status) {
+  const statusMap = { 0: 'danger', 1: 'info' }
   return statusMap[status]
 }

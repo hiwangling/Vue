@@ -31,3 +31,11 @@ export function deletedead(query) {
     params: query
   })
 }
+
+export function godead(data) {
+  return request({
+    url: '/bury/an_zhang',
+    method: 'post',
+    data
+  })
+}

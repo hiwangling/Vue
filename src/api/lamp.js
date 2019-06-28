@@ -1,41 +1,42 @@
 import request from '@/utils/request'
 
-export function treelist(query) {
+export function lamplist(query) {
   return request({
-    url: '/evergreen/list',
+    url: '/lighting/list',
     method: 'get',
     params: query
   })
 }
 
-export function treedel(query) {
+export function lampdel(query) {
   return request({
-    url: '/evergreen/del',
+    url: '/lighting/del',
     method: 'get',
     params: query
   })
 }
 
-export function treeedit(data) {
+export function lampedit(data) {
   return request({
-    url: '/evergreen/edit',
+    url: '/lighting/edit',
     method: 'post',
     data
   })
 }
 
-export function treeCreate(data) {
+export function lampCreate(data) {
   return request({
-    url: '/evergreen/add',
+    url: '/lighting/add',
     method: 'post',
     data
   })
 }
 
-export function treePay(query) {
+export function lampPay(query) {
   return request({
-    url: '/evergreen/settlement',
+    url: '/lighting/settlement',
     method: 'get',
     params: query
   })
 }
+

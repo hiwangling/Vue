@@ -93,7 +93,7 @@
 </template>
 <script>
 // import { lamplist, lampadd, lampdelete, lamppay } from '@/api/lamp'
-import { treeCreate, treelist, treedel, treeedit } from '@/api/tree'
+import { treeCreate, treelist, treedel, treeedit, treePay } from '@/api/tree'
 import { vuexData } from '@/utils/mixin'
 import { listdead } from '@/api/dead'
 import { parseTime } from '@/utils'
@@ -204,10 +204,12 @@ export default {
         .then(res => {
           if (res.data !== []) {
             res.data.forEach((v, k) => {
-              deadbox.push(v.vcname)
+              this.dead = v.vcname
+              // deadbox.push(v.vcname)
             })
           }
         })
+      console.log(deadbox)
       this.dead = deadbox.join(' ')
     },
     choose(date) {
@@ -217,9 +219,8 @@ export default {
       this.sum()
     },
     sum() {
-      console.log(this.dataForm.star)
-      const v = this.dataForm.star.getFullYear()
-      const e = this.dataForm.end.getFullYear()
+      const v = new Date(this.dataForm.star).getFullYear()
+      const e = new Date(this.dataForm.end).getFullYear()
       const m = e - v <= 0 ? 1 : e - v
       this.dataForm.total = m * this.dataForm.amount * this.dataForm.real_price
     },
@@ -245,32 +246,32 @@ export default {
       })
     },
     handlePay(row) {
-      // this.$confirm('付款此订单后将无法修改和删除, 是否继续?', '付款操作', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning',
-      //   customClass: 'confirmTop'
-      // }).then(() => {
-      //   lamppay(row)
-      //     .then(res => {
-      //       this.$notify.success({
-      //         title: '成功',
-      //         message: '付款服务成功'
-      //       })
-      //       this.getList()
-      //     })
-      //     .catch(res => {
-      //       this.$notify.error({
-      //         title: '失败',
-      //         message: res.msg
-      //       })
-      //     })
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消'
-      //   })
-      // })
+      this.$confirm('付款此订单后将无法修改和删除, 是否继续?', '付款操作', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        customClass: 'confirmTop'
+      }).then(() => {
+        treePay(row)
+          .then(res => {
+            this.$notify.success({
+              title: '成功',
+              message: '付款服务成功'
+            })
+            this.getList()
+          })
+          .catch(res => {
+            this.$notify.error({
+              title: '失败',
+              message: res.msg
+            })
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     },
     handleDelete(row) {
       treedel(row)
