@@ -18,15 +18,6 @@ const sellRouter = {
         noCache: true,
         perms: ['GET /api/v1/reserve/list']
       }
-    }, {
-      path: 'save-list',
-      name: 'VueSaveList',
-      component: () => import('@/views/sell/save-list'),
-      meta: {
-        title: '寄存管理',
-        noCache: true,
-        perms: ['GET /api/v1/save/list']
-      }
     },
     {
       path: 'service-list',

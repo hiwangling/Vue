@@ -18,17 +18,17 @@ const serviceRouter = {
         noCache: true,
         perms: ['GET /api/v1/service_info/list', 'POST /api/v1/service_info/add', 'POST /api/v1/service_info/edit', 'GET /api/v1/service_info/del']
       }
-    },
-    {
-      path: 'service-combo',
-      name: 'VueCombo',
-      component: () => import('@/views/service/service-combo'),
-      meta: {
-        title: '服务套餐',
-        noCache: true,
-        perms: ['GET /api/v1/combo/list', 'POST /api/v1/combo/add', 'POST /api/v1/combo/edit', 'GET /api/v1/combo/del']
-      }
     }
+    // {
+    //   path: 'service-combo',
+    //   name: 'VueCombo',
+    //   component: () => import('@/views/service/service-combo'),
+    //   meta: {
+    //     title: '服务套餐',
+    //     noCache: true,
+    //     perms: ['GET /api/v1/combo/list', 'POST /api/v1/combo/add', 'POST /api/v1/combo/edit', 'GET /api/v1/combo/del']
+    //   }
+    // }
   ]
 }
 export default serviceRouter

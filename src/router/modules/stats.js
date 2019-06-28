@@ -9,16 +9,16 @@ const statsRouter = {
   name: 'vueStats',
   meta: { title: '统计管理', icon: 'nested' },
   children: [
-    // {
-    //   path: 'cemetery-list',
-    //   name: 'VueCemeteryList',
-    //   component: () => import('@/views/stats/cemetery-list'),
-    //   meta: {
-    //     title: '购墓统计',
-    //     noCache: true,
-    //     perms: ['GET /api/v1/service_info/service_infos_by_cemetery']
-    //   }
-    // },
+    {
+      path: 'cemetery-list',
+      name: 'VueCemeteryList',
+      component: () => import('@/views/stats/cemetery-list'),
+      meta: {
+        title: '购墓统计',
+        noCache: true,
+        perms: ['GET /api/v1/service_info/service_infos_by_cemetery']
+      }
+    },
     // {
     //   path: 'service-list',
     //   name: 'VueServiceList',
