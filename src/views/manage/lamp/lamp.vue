@@ -199,17 +199,14 @@ export default {
     },
     getdead() {
       const data = { cid: this.cems.id }
-      // const deadbox = []
       listdead(data)
         .then(res => {
           if (res.data !== []) {
             res.data.forEach((v, k) => {
-              // deadbox.push(v.vcname)
-              this.dead = v.vcname
+              this.dead += v.vcname + '  '
             })
           }
         })
-      // this.dead = deadbox.join(' ')
     },
     choose(date) {
       this.dataForm.total = (date - this.dataForm.star <= 0 ? 1 : (date - this.dataForm.star) + 1) * this.dataForm.real_price

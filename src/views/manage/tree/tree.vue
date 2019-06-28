@@ -199,18 +199,14 @@ export default {
     },
     getdead() {
       const data = { cid: this.cems.id }
-      const deadbox = []
       listdead(data)
         .then(res => {
           if (res.data !== []) {
             res.data.forEach((v, k) => {
-              this.dead = v.vcname
-              // deadbox.push(v.vcname)
+              this.dead += v.vcname + '  '
             })
           }
         })
-      console.log(deadbox)
-      this.dead = deadbox.join(' ')
     },
     choose(date) {
       this.sum()
